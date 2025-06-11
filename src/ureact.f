@@ -727,12 +727,13 @@ C
 C
         CALL gspart(80,'Ne22',8,aamass,zbeam,tlif,ubuf,nubuf)
 C
-C--     nonresonant level populated --> idpart = 81
+C--     resonant level populated --> idpart = 81
 C
         tlif     = hbar/0.931e-3 ! Jaeger 1.1keV lab->0.931 CM
         resenerg = 1.213
         reswidth = hbar/tlif
-        aamass = sqrt((aamass+targmass)**2 + 2.*targmass*beamenerg*.001)
+        aamass   = aamass + resenerg/1000. + hemass
+C        aamass = sqrt((aamass+targmass)**2 + 2.*targmass*beamenerg*.001)
         ubuf(1)  = fkine(2)
 C
         CALL gspart(81,'nonres_Mg26_',8,aamass,zprod,tlif,ubuf,nubuf)
