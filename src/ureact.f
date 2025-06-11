@@ -59,7 +59,7 @@ C      ( 9) 23Mg(p,g)24Al                                              C
 C      (10) 26mAl(p,g)27Si                                             C
 C      (11) 7Be(p,g)8B                                                 C
 C      (12) 21Na(d,n)22Mg
-C      (13) 23Na(d,n)24Mg 2+                                           C
+C      (13) 22Na(a,n)25Mg 11.83(gs)                                    C
 C      (14) 23Na(p,g)24Mg 2+                                           C
 C      (15) 20Ne(p,g)21Na nonres
 C      (16) 20Na(p,g)21Mg131                                           C
@@ -729,7 +729,7 @@ C
 C
 C--     nonresonant level populated --> idpart = 81
 C
-        tlif     = 6.5821e-19  !1 KeV width
+        tlif     = hbar/0.931e-3 ! Jaeger 1.1keV lab->0.931 CM
         resenerg = 1.213
         reswidth = hbar/tlif
         aamass = sqrt((aamass+targmass)**2 + 2.*targmass*beamenerg*.001)
