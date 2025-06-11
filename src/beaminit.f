@@ -12,7 +12,7 @@
       REAL*4 recoilenerg,beammom,refmom  !In MeV
       REAL*4 gamma,beta,totmass,eint,excit,ereccm,toten,momm,betacm,
      +       gamcm,
-     +       erec, trec, treco, eloss, e0rec
+     +       erec, trec, treco, eloss, e0rec, pcm, neutmass
       Integer*4 itrktyp, nubuf, i
       character*20 state
 C
@@ -50,6 +50,8 @@ C center of target
         etot = e0beam+beammass
         e0recoil=(resmass**2+prodm**2)*(etot+targmass)/(2*resmass**2)
      &    - prodm   !ErecoilCM * gamma = value for 90deg CM gamma
+C       e0recoil=5.6
+C       print*, '***RECOIL ENERGY: ', e0recoil
 !  This is the place any angular distribution equations would come in.
 !  Lorentz boosts need to be made for each angle in 3-d kinematics. 
 !
@@ -230,11 +232,19 @@ C.
 
 C.
 C.--> Recoil energy at center of target
-C.
+C     .double pcm = sqrt((pow(S - M3*M3 - M4*M4, 2) - 4*M3*M3*M4*M4) / (4*S));
+        
         totmass = sqrt( (beammass+targmass)**2 +
      +     2.*targmass*(beamm/1000.))
+
         eint = totmass - beammass - targmass
-        excit = (beammass+targmass-prodm) + eint
+C       different excit for (d,n)
+        If(lkine.eq.13) then
+           neutmass = 0.9395654
+           excit = (beammass+targmass-prodm-neutmass) + eint
+        Else
+           excit = (beammass+targmass-prodm) + eint
+        Endif
         ereccm = sqrt( prodm**2 + excit**2 )
         toten = (beamm/1000.) + beammass
         momm = sqrt( toten**2 - beammass**2 )
@@ -242,8 +252,10 @@ C.
         gamcm = (toten+targmass)/sqrt((toten+targmass)**2-momm**2)
         erec = gamcm*ereccm
         trec = erec - prodm
-c        print*, totmass, eint, excit, ereccm
-c        print*, momm, betacm, gamcm, erec, trec
+        print*, "totmass, beammass, targmass, eint, excit, ereccm"
+        print*, "momm, betacm, gamcm, erec, trec"
+        print*, totmass, beammass, targmass, eint, excit, ereccm
+        print*, momm, betacm, gamcm, erec, trec
         partid = irecoil
         CALL gftmat(imate,partid,'LOSS',1,trec,dedx,pcut,ixst)
         treco = trec - 0.001*dedx*exitdens

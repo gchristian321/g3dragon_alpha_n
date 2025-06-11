@@ -18,13 +18,14 @@ C
       REAL    ubuf(nubuf)
 C
       REAL hbar
-      REAL amugev, hmass, hemass, deutmass, c12mass
+      REAL amugev, hmass, hemass, deutmass, c12mass, neutmass
 C
       PARAMETER ( hbar   = 6.582122   E-22 )
       PARAMETER ( amugev = 0.93149432 E+00 )
       PARAMETER ( hmass  = 1.007825032 * amugev)
       PARAMETER ( hemass = 4.002603250 * amugev)
       PARAMETER (deutmass = 2.0141018 * amugev )
+      PARAMETER (neutmass = 1.0086649 * amugev )
       PARAMETER ( c12mass = 12.0 * amugev )
 C
       REAL devmass,aamass,aamass1,zbeam, elevel, aprod,  tlif
@@ -708,56 +709,60 @@ C
         write(6,*)' 100% to gs  + neutron'
       case(13)
 C
-C       ' (12) 23Na(d,n)24Mg 2+ '
+C       ' (13) 22Ne(a,n)25Mg (gs) '
 C
-        zbeam = 11.
-        abeam = 23.
-        atarg =  2.
+        zbeam = 10.
+        abeam = 22.
+        atarg =  4.
         zprod = 12
         aprod = atarg + abeam
+        targmass = hemass
 C
 C--     create beam particle --> idpart = 80
 C
-       	devmass = -9530.0E-6
+       	devmass = -8024.7202E-06
        	aamass  = abeam*amugev + devmass
         tlif    = 1000.
         ubuf(1) = fkine(1)
 C
-        CALL gspart(80,'Na23',8,aamass,zbeam,tlif,ubuf,nubuf)
+        CALL gspart(80,'Ne22',8,aamass,zbeam,tlif,ubuf,nubuf)
 C
 C--     nonresonant level populated --> idpart = 81
 C
-        tlif     = 1e-20  !10 KeV width
-        resenerg = 0.00
+        tlif     = 6.5821e-19  !1 KeV width
+        resenerg = 1.213
         reswidth = hbar/tlif
-        aamass = sqrt((aamass+deutmass)**2 + 2.*deutmass*beamenerg*.001)
+        aamass = sqrt((aamass+targmass)**2 + 2.*targmass*beamenerg*.001)
         ubuf(1)  = fkine(2)
 C
-        CALL gspart(81,'nonres_Mg25_',8,aamass,zprod,tlif,ubuf,nubuf)
+        CALL gspart(81,'nonres_Mg26_',8,aamass,zprod,tlif,ubuf,nubuf)
 C
-C--     Define states in Mg24  from neutron decays from resonance
+C--     Define states in Mg25  from neutron decays from resonance
 C
-        devmass = -13930.7E-6
-        prodm   = (aprod-1)*amugev + devmass !gs of 24Mg
+        devmass = -13192.785E-6
+        prodm   = (aprod-1)*amugev + devmass !gs of 25Mg
+        write(6,*) "25Mg MASS: ", prodm
 C
 
-        elevel  = 1.368
+c$$$        elevel  = 0.
+c$$$
+c$$$        aamass1  = prodm + elevel/1000.
+c$$$        if(aamass .lt. aamass1) 
+c$$$     &  write(6,*) "Beam energy below 2+ threshold"
+c$$$        tlif    = 1000
+c$$$C
+c$$$        CALL gspart(82,'Mg24_2+_2',8,aamass1,zprod,tlif,ubuf,nubuf)
+c$$$C--     ground state --> idpart = 93
+c$$$C
 
-        aamass1  = prodm + elevel/1000.
-        if(aamass .lt. aamass1) 
-     &  write(6,*) "Beam energy below 2+ threshold"
-        tlif    = 3.E-11
-C
-        CALL gspart(82,'Mg24_2+_2',8,aamass1,zprod,tlif,ubuf,nubuf)
-C--     ground state --> idpart = 93
-C
-        irecoil=83
+        irecoil=82
         tlif   = 1000.
 C
-        CALL gspart(83,'Mg24_0+',8,prodm,zprod,tlif,ubuf,nubuf)
+        CALL gspart(82,'Mg25_gs',8,prodm,zprod,tlif,ubuf,nubuf)
 C
 C--     branch info -- resonance decays
 C
+C     particle 13 is the neutron
         brat(1)= 100.
         mode(1)= 13+100*82
         CALL uzero(brat,2,6)
@@ -765,18 +770,21 @@ C
         CALL gsdk(81,brat,mode)
 C
 C
-        brat(1) = 100.
-        mode(1) = 1 + 100*83
 
+c$$$
+
+C        brat(1) = 100.
+c$$$        mode(1) = 1 + 100*82
+c$$$
+c$$$C
+c$$$        CALL uzero(brat,2,6)
+c$$$        CALL uzero(mode,2,6)
+c$$$C
+c$$$        CALL gsdk(82,brat,mode)
 C
-        CALL uzero(brat,2,6)
-        CALL uzero(mode,2,6)
 C
-        CALL gsdk(82,brat,mode)
-C
-C
-        write(6,*)'|**** 23Na(d,ng)24Mg reaction ****|'
-        write(6,*)' 100% to 2+   + neutron'
+        write(6,*)'|**** 22Ne(a,n)25Mg reaction ****|'
+        write(6,*)' 100% to gs'
 C
       case(14)
 C
