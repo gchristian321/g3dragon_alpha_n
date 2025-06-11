@@ -171,7 +171,7 @@ c         thet = 0.
          plab(2) = beammom*cosy
          plab(3) = beammom*cosz
          CALL gskine(plab,ip,nvtx,0,0,nt) 
-      else
+      else !if(alpha)
 C.
 C.--> fill upright long. ellipse at the beam waist
 C.
@@ -200,13 +200,12 @@ C.         xx = 0.01 !CR adds way to let beam never react, uncomment if needed
 c      print*, 'Erec (CM)', erescm
 
 c      yy = xx**2/(2.*(resmass-beammass-xx/1000.))
-c      print*, eres, beame*0.001, xx, eres0
 c      CALL hfill(502,xx,0.,1.0)
 
 
-      
-      
-      ENDIF
+      ENDIF !LKINE.GE.19
+      print*, eres*1000, beame, xx, eres0*1000,
+     + "<<<REAC INFO(eres,beame,xx,eres0)"
 C.
 !      beamv = clight*sqrt(2.*beame/abeam/amumev)
 !      betagamma = beamv/sqrt(clight**2+beamv*beamv)
