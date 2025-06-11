@@ -42,7 +42,11 @@ C center of target
         CALL gfpart(80,state,itrktyp,beammass,beamz,tlif,ubuf,nubuf)
         CALL gfpart(81,state,itrktyp,resmass,resz,tlif,ubuf,nubuf)
         print*, '***', targmass, resmass, beammass, resenerg, prodm
-        eres0 = (prodm/targmass)*.001 !! non-relativistic transformation from lab to CM 
+        if(lkine.ne.13) then
+           eres0 = (prodm/targmass)*.001 !! non-relativistic transformation from lab to CM 
+        else
+           eres0 = ((beammass+targmass)/targmass)*.001 !! non-relativistic transformation from lab to CM 1.213E-3
+        endif
         print*, prodm,targmass,prodm/targmass,eres0
         e0beam = (resmass-beammass-targmass)*(resmass+beammass+targmass)
      &   /(2.0*targmass)
@@ -184,7 +188,11 @@ C. -----
               print*, '********** Using BEAM FFCARD **********'
             CALL gfpart(80,state,itrktyp,beammass,beamz,tlif,ubuf,nubuf)
               CALL gfpart(81,state,itrktyp,resmass,resz,tlif,ubuf,nubuf)
-         eres0 = prodm/targmass*0.001
+         if(lkine.ne.13) then
+            eres0 = prodm/targmass*0.001
+         else
+            eres0 = ((beammass+targmass)/targmass)*.001 !! non-relativistic transformation from lab to CM 1.213E-3
+         endif
          imate = mtarg
          partid = 80
        CALL gftmat(imate,partid,'LOSS',1,beamenerg*.001,dedx,pcut,ixst)
@@ -252,8 +260,8 @@ C       different excit for (d,n)
         gamcm = (toten+targmass)/sqrt((toten+targmass)**2-momm**2)
         erec = gamcm*ereccm
         trec = erec - prodm
-        print*, "totmass, beammass, targmass, eint, excit, ereccm"
-        print*, "momm, betacm, gamcm, erec, trec"
+C        print*, "totmass, beammass, targmass, eint, excit, ereccm"
+C        print*, "momm, betacm, gamcm, erec, trec"
         print*, totmass, beammass, targmass, eint, excit, ereccm
         print*, momm, betacm, gamcm, erec, trec
         partid = irecoil
@@ -262,6 +270,8 @@ C       different excit for (d,n)
         treco = treco*(1.+energscale)
         recoilmom = 1000*(sqrt((treco + prodm)**2 - prodm**2))
         write(6,*) '++++++++++++++++RECOIL+++++++++++++++++++++++' 
+        write(6,*) 'CM, Lab resonance energy', resenerg,
+     +            (resenerg*(beammass+targmass)/targmass)
         write(6,*)'Recoil Mean Energy at target centre (90 deg gamma)',
      +            trec*1000.,' MeV'
         write(6,*)  'Gas half thickness',exitdens,' cm'
