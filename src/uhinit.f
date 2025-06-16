@@ -387,7 +387,7 @@ C  'History' ntuple
      +                   'z_r:R,thet_r:R,xstop:R,ystop:R,zstop:R,'//
      +                   'xint:R,yint:R,zint:R,'//
      +    'x:R,y:R,xp:R,yp:R,xtest(10):R,ytest(10):R,etest(10):R,'//
-     +     'dsssdpos:I,beamtof:R' )
+     +     'dsssdpos:I,beamtof:R,E_n:R,cost_n:R,cosp_n:R' )
 C.
 C.--> New nutple 20040407
 C.

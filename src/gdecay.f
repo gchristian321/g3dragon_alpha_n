@@ -179,6 +179,10 @@ C
          If(NTYPE(K).EQ.1)then
           E_gp(Nodec) = GKIN(4,K)*1000.
           cost_gp(Nodec) = GKIN(3,K)/GKIN(4,K)
+         Elseif(NTYPE(K).EQ.13)then
+          E_n = (GKIN(4,K)-XM(K))*1000.
+          cost_n = GKIN(3,K)/PTOT
+          cosp_n = GKIN(1,K)/(PTOT*SQRT(1.-cost_n**2))          
          Elseif(NTYPE(K).EQ.IRECOIL)then
           E_rec = (GKIN(4,K)-XM(K))*1000.
           cost_r = GKIN(3,K)/PTOT

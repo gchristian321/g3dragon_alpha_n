@@ -2,9 +2,9 @@
      +     cost_gp(15), cost_r, cosp_r, x_r, y_r, z_r, thet_r,
      +	   xstop, ystop, zstop, xint, yint, zint,x,y,xp,yp,xtest(10),
      +     ytest(10),
-     +	   etest(10), beamtof
+     +	   etest(10), beamtof, cost_n, cosp_n, E_n
       INTEGER Nodec, react, recdet, dsssdpos
       COMMON /HISTORY/ E_int, E_rec, E_g, E_gp, cost_g, phi_g,
      +     cost_gp, cost_r, cosp_r, Nodec, react, recdet, x_r, y_r, z_r,
      +	   thet_r, xstop, ystop, zstop, xint, yint, zint,x,y,xp,yp,xtest,
-     +	   ytest, etest, dsssdpos, beamtof
+     +	   ytest, etest, dsssdpos, beamtof, E_n, cost_n, cosp_n

@@ -70,6 +70,9 @@ C.
 C.    Initialize all ntuple variables
        print*, 'gukine_full.f'
       E_int = 0.
+      E_n = 0.
+      cost_n = 99.
+      cosp_n = 99.
       E_rec = 0.
       cost_r = 99.
       cosp_r = 99.
