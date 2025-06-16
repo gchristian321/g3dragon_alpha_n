@@ -48,7 +48,7 @@ C     Helium
       endif
 C
 C     Target pressure
-      ptarg = 5.0/760.
+      ptarg = 4.87/760.
       targetl = 5.5
       exitdens = targetl
       entdens = targetl
