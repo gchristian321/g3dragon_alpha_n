@@ -1,6 +1,9 @@
 # Special fork of DRAGON GEANT3 Simulation
 ## Implements 22Ne(a,n)25Mg reaction
 
+This code originally forked from the `master` branch of:
+https://github.com/DRAGON-Collaboration/G3_DRAGON
+
 Some notes about the special implementation:
  - 22Ne(a,n)26Mg reaction is hard-coded as case(13)
  - Resonance energy is hard-coded for E_x = 11.83 MeV resonance
