@@ -1,3 +1,47 @@
+# Special fork of DRAGON GEANT3 Simulation
+## Implements 22Ne(a,n)25Mg reaction
+
+Some notes about the special implementation:
+ - 22Ne(a,n)26Mg reaction is hard-coded as case(13)
+ - Resonance energy is hard-coded for E_x = 11.83 MeV resonance
+ - Resonance widths also hard coded
+ - Central tune energy calculated from 22Ne(a,n) kinematics (needs checking still)
+ - Outgoing recoil vectors should be tracked as normal for rad. capt, and saved in the same E_rec, cost_r, cosp_r hbook outputs
+ - Outgoing neutron vectors stored as new hbook branch E_n, cost_n, cosp_n; neutrons not tracked in the simulation (AFAIK)
+ - Pressure is set (hard-coded) to 4.87 torr to match 4.87(8) torr pressure in S2230 runs 12939-12946 [`ugmate_trgt.f`]
+
+To run, first source `dsinit-ne22an.dat`, which looks like the following:
+```
+## Define necessary environment variables for BASH shell
+export DSROOT="`pwd`"
+
+export DSDAT="$DSROOT/dat"
+export DSLIB="$DSROOT/lib"
+export DSSOURCE="$DSROOT/src"
+export DSINCLUDE="$DSROOT/include"
+export DSBIN="$DSROOT/bin"
+export MITRAY="$DSDAT/dragon_2014_IC.dat"
+export FFCARD="$DSROOT/dragon_2003_ne22an.ffcards"
+#export INPUT="$DSDAT/26alpg.dat"
+```
+Then ensure that `dragon_2003_ne22an.ffcards` makes sense, specifically
+beam energy should be appropriate to reach the resonance in target; the
+original version is:
+```
+BEAM 7.979
+```
+(note -- this has not been tested with BEAM unset, only with it set).
+
+The ffcards file should also set the reacton case 13 and 4+ charge states
+for both beam and recoil:
+```
+FKIN 13 4.0 4.0
+```
+**It is only recommended to use this version for specific 22Ne(a,n) simulations!!**
+
+Ordinary README for DRAGON GEANT3 proceeds below...
+
+
 # Geant3
 
 ## Prerequisites:
