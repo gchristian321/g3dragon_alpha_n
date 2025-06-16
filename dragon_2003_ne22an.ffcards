@@ -251,7 +251,7 @@ C     FKINE (2) = effective charge of reaction PRODUCT in vacuum       C
 C                                                                      C
 C++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++C
 C
-FKIN 13 5.0 6.0
+FKIN 13 4.0 4.0
 C
 C REFERENCE TUNE E=1.8885 MeV, A=19, Q=4
 TUNE 1.8885 19. 4.
