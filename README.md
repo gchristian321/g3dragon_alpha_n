@@ -40,6 +40,38 @@ for both beam and recoil:
 ```
 FKIN 13 4.0 4.0
 ```
+
+## Magnetic & Electric field scaling
+### 2025/06/18
+A new option has been added to manually scale magnetic and electric fields.
+These can be set with the SCAL variable in the ffcards file. For example:
+```
+SCAL  0.948416 0.8936756
+```
+The first argument is the scale factor for the B field, and the second for the E
+field.
+
+Note that the scaling factors are applied AFTER the scaling factors for the mistune
+(MTUN), where the 5th argument is a per-cent deviation from the "standard" tune
+(defined by recoils at 90-deg COM angle).  So the process is:
+ 1. Calculate energies of recoils at 90 DEG COM. Then calculate scaling factors
+relative to reference tune (E=1.8885 MeV, A=19, Q=4) to produce fields that 
+center these recoils.
+ 2. Multiply fields in (1) by the scaling factors set by SCAL in the ffcards file.
+(If SCAL un-set, nothing happens in this step).
+
+The code now also prints some information about the fields, including an estimate of
+the MD1 values and ED1 setpoints. *These need to be double checked to ensure the
+reference tune --> scaled tune fields are consistent with the equations used.**
+To find these printouts easily do:
+```
+./bin/dsbatch | grep -A 10 -B 5 Reference
+```
+**Note that the re-scaling only works if BEAM is used in the ffcards file to set
+the beam energy manually.** Hence, simulaitons of (a,n) equations should always use
+this option.
+
+
 **It is only recommended to use this version for specific 22Ne(a,n) simulations!!**
 
 Ordinary README for DRAGON GEANT3 proceeds below...
