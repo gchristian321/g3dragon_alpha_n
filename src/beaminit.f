@@ -301,7 +301,6 @@ C applying the reaction rescaling and the mistune
         Else
            escl0 = 1.
         Endif
-        write(6,*) ' Initial (b,e)scale:', bscl0, escl0
         etaref=refenerg/(2*(refatno*amumev)**2)
         etatune=recoilenerg/(2*(prodm*1000.)**2)
         refmom = sqrt(refenerg*(refenerg+2*refatno*amumev))
@@ -341,6 +340,7 @@ C. -----
         write(6,*) 'Scaled E, A, Q, eta, P, B, E',
      +   recoilenerg, Atun, fkine(2), etatune, recoilmom,
      +   Btun, Etun
+        write(6,*) ' Initial (B, E)scale:', bscl0, escl0
         write(6,*) 'Magnetic element scale factor ',bscale
         write(6,*) 'Bref * bscale ', Bref*bscale
         write(6,*) 'Electric element scale factor ',escale
