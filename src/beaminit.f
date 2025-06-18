@@ -13,7 +13,7 @@
       REAL*4 gamma,beta,totmass,eint,excit,ereccm,toten,momm,betacm,
      +       gamcm,
      +       erec, trec, treco, eloss, e0rec, pcm, neutmass, treco0,
-     +       Bref, Eref, cmag, Btun, Etun, Atun
+     +       Bref, Eref, cmag, Btun, Etun, Atun, bscl0, escl0
       Integer*4 itrktyp, nubuf, i
       character*20 state
 C
@@ -288,13 +288,29 @@ C        print*, momm, betacm, gamcm, erec, trec
 !
 !  Determine scaling parameters for this reaction c/w the reference tune
 !
-        write(6,*) ' Initial (b,e)scale:', bscale, escale
+C GAC 2025/06/18 --> Check if SCALE is set in ffcards file
+C if so, multiply the B or E field by the set value AFTER
+C applying the reaction rescaling and the mistune
+        If(bscale.ne.0) then
+           bscl0 = bscale
+        Else
+           bscl0 = 1.
+        Endif
+        If(escale.ne.0) then
+           escl0 = escale
+        Else
+           escl0 = 1.
+        Endif
+        write(6,*) ' Initial (b,e)scale:', bscl0, escl0
         etaref=refenerg/(2*(refatno*amumev)**2)
         etatune=recoilenerg/(2*(prodm*1000.)**2)
         refmom = sqrt(refenerg*(refenerg+2*refatno*amumev))
         bscale = recoilmom/fkine(2)/ (refmom/refq)
         escale = recoilenerg*refq/(refenerg*fkine(2))*
      +     (1+etatune)/(1+2*etatune)*(1+2*etaref)/(1+etaref)
+C GAC 2025/06/18 --> Apply SCAL settings from ffcards here
+        bscale = bscale * bscl0
+        escale = escale * escl0
 C
 C  Calculate B field (hall probe) and E field (setpoint) for
 C  reference tune, E=1.8885, A=19, q=4
