@@ -12,7 +12,7 @@
       REAL*4 recoilenerg,beammom,refmom  !In MeV
       REAL*4 gamma,beta,totmass,eint,excit,ereccm,toten,momm,betacm,
      +       gamcm,
-     +       erec, trec, treco, eloss, e0rec, pcm, neutmass
+     +       erec, trec, treco, eloss, e0rec, pcm, neutmass, treco0
       Integer*4 itrktyp, nubuf, i
       character*20 state
 C
@@ -83,8 +83,8 @@ C.=     beamenerg, dedx in MeV/cm , e0beam in GeV
 C.==
         
 c        If(beamenerg.ne.0.)then
-c         continue
-c        Else
+c         continue    
+c        Else !If(beamenerg.eq.0) then
 
         beamenerg = e0beam*1000. + dedx * entdens
 c        Endif
@@ -184,7 +184,7 @@ C. -----
               write(6,*) 'Electric element scale factor ',escale
             write(6,*)'++++++++++++++++++++++++++++++++++++++++++++++++'
             print*, 'beaminit.f'
-           else
+           else !If(beamenerg.eq.0)
               print*, '********** Using BEAM FFCARD **********'
             CALL gfpart(80,state,itrktyp,beammass,beamz,tlif,ubuf,nubuf)
               CALL gfpart(81,state,itrktyp,resmass,resz,tlif,ubuf,nubuf)
@@ -246,7 +246,7 @@ C     .double pcm = sqrt((pow(S - M3*M3 - M4*M4, 2) - 4*M3*M3*M4*M4) / (4*S));
      +     2.*targmass*(beamm/1000.))
 
         eint = totmass - beammass - targmass
-C       different excit for (d,n)
+C       different excit for (a,n)
         If(lkine.eq.13) then
            neutmass = 0.9395654
            excit = (beammass+targmass-prodm-neutmass) + eint
@@ -262,11 +262,12 @@ C       different excit for (d,n)
         trec = erec - prodm
 C        print*, "totmass, beammass, targmass, eint, excit, ereccm"
 C        print*, "momm, betacm, gamcm, erec, trec"
-        print*, totmass, beammass, targmass, eint, excit, ereccm
-        print*, momm, betacm, gamcm, erec, trec
+C        print*, totmass, beammass, targmass, eint, excit, ereccm
+C        print*, momm, betacm, gamcm, erec, trec
         partid = irecoil
         CALL gftmat(imate,partid,'LOSS',1,trec,dedx,pcut,ixst)
         treco = trec - 0.001*dedx*exitdens
+		treco0 = treco
         treco = treco*(1.+energscale)
         recoilmom = 1000*(sqrt((treco + prodm)**2 - prodm**2))
         write(6,*) '++++++++++++++++RECOIL+++++++++++++++++++++++' 
@@ -277,9 +278,12 @@ C        print*, "momm, betacm, gamcm, erec, trec"
         write(6,*)  'Gas half thickness',exitdens,' cm'
         write(6,*)   'dE/dx in target   ',dedx   ,' MeV/cm'
         write(6,*)'++++++++++++++++++++++++++++++++++++++++++++++++'
-        write(6,*)   'Recoil Mean Energy leaving target', treco*1000.,
-     + ' MeV',   'Momentum',recoilmom,' MeV/c' 
+        write(6,*)   'Recoil Mean Energy leaving target [90 deg CM]'
+     + , treco0*1000., ' MeV',   ' Momentum',recoilmom,' MeV/c'
         recoilenerg = treco*1000.
+		write(6,*) 'Energy mistune (%) ', energscale*100
+        write(6,*) 'Recoil energy tuned to ', recoilenerg,' MeV'
+
 !
 !  Determine scaling parameters for this reaction c/w the reference tune
 !
