@@ -12,7 +12,8 @@
       REAL*4 recoilenerg,beammom,refmom  !In MeV
       REAL*4 gamma,beta,totmass,eint,excit,ereccm,toten,momm,betacm,
      +       gamcm,
-     +       erec, trec, treco, eloss, e0rec, pcm, neutmass, treco0
+     +       erec, trec, treco, eloss, e0rec, pcm, neutmass, treco0,
+     +       Bref, Eref, cmag, Btun, Etun, Atun
       Integer*4 itrktyp, nubuf, i
       character*20 state
 C
@@ -184,7 +185,7 @@ C. -----
               write(6,*) 'Electric element scale factor ',escale
             write(6,*)'++++++++++++++++++++++++++++++++++++++++++++++++'
             print*, 'beaminit.f'
-           else !If(beamenerg.eq.0)
+         else                   !If(beamenerg.eq.0)
               print*, '********** Using BEAM FFCARD **********'
             CALL gfpart(80,state,itrktyp,beammass,beamz,tlif,ubuf,nubuf)
               CALL gfpart(81,state,itrktyp,resmass,resz,tlif,ubuf,nubuf)
@@ -287,19 +288,47 @@ C        print*, momm, betacm, gamcm, erec, trec
 !
 !  Determine scaling parameters for this reaction c/w the reference tune
 !
+        write(6,*) ' Initial (b,e)scale:', bscale, escale
         etaref=refenerg/(2*(refatno*amumev)**2)
         etatune=recoilenerg/(2*(prodm*1000.)**2)
         refmom = sqrt(refenerg*(refenerg+2*refatno*amumev))
         bscale = recoilmom/fkine(2)/ (refmom/refq)
         escale = recoilenerg*refq/(refenerg*fkine(2))*
      +     (1+etatune)/(1+2*etatune)*(1+2*etaref)/(1+etaref)
+C
+C  Calculate B field (hall probe) and E field (setpoint) for
+C  reference tune, E=1.8885, A=19, q=4
+C  B from DAH 2012 NIM paper
+C  E from printout in DRAGON counting room
+        cmag = 48.23 !design MeV/T^2
+        Bref = 
+     +  sqrt((refenerg/refatno + (refenerg/refatno)**2/(2*amumev))
+     +       * (refatno/refq)**2 / cmag) * 1E4
+        Eref = 2468.*(Bref/1E4)**2/(refatno/refq)
+C
+C  Calculate B field (hall probe) and E field (setpoint) for
+C  scaled recoil tune
+        Atun = (prodm*1000)/amumev
+        Btun = 
+     +  sqrt((recoilenerg/Atun + (recoilenerg/Atun)**2/(2*amumev))
+     +       * (Atun/refq)**2 / cmag) * 1E4
+        Etun = 2468.*(Btun/1E4)**2/(Atun/fkine(2))
+        
+        
 C.----- Trick to make beam particles get through if needed 
 C.  ----- (rescale Electric Dipoles)
 C.        escale = escale*prodm/beammass
 C. ----- 
         write(6,*)'++++++++++++++++++++++++++++++++++++++++++++++++'
+        write(6,*) 'Reference E, A, Q, eta, P, B, E',
+     +       refenerg, refatno, refq, etaref, refmom, Bref, Eref
+        write(6,*) 'Scaled E, A, Q, eta, P, B, E',
+     +   recoilenerg, Atun, fkine(2), etatune, recoilmom,
+     +   Btun, Etun
         write(6,*) 'Magnetic element scale factor ',bscale
+        write(6,*) 'Bref * bscale ', Bref*bscale
         write(6,*) 'Electric element scale factor ',escale
+        write(6,*) 'Eref * escale ', Eref*escale
         write(6,*)'++++++++++++++++++++++++++++++++++++++++++++++++'
         Endif
         endif
