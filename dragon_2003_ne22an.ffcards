@@ -8,7 +8,7 @@ C ========== RUNG: IDRUN IDEVT [1,0]
 C == IDRUN ==   User run number
 C == IDEVT ==   User event number
 C
-RUNG 1
+RUNG 2
 C
 C ========== TRIG: NEVENT ==========
 C
@@ -253,6 +253,12 @@ C++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++C
 C
 FKIN 13 4.0 4.0
 C
+C SET Angular distribution options
+C --> option, min[cos(th_CM)], max[cos(th_CM)]
+C options: 0 --> full angular distribution
+C          1 --> limit to range given in next 2 args
+C 0 -1 1 gives full isotropic
+ANGD 0 -1. 1.
 C REFERENCE TUNE E=1.8885 MeV, A=19, Q=4
 TUNE 1.8885 19. 4.
 C    MTUN x(cm) y(cm) dx(rad) dy(rad) separator tune(%/100)

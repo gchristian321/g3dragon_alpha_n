@@ -19,6 +19,10 @@ C
 C
       COMMON /LKINE/ lkine, fkine
 C
-
+      INTEGER adist
+C
+      REAL costhrnge(2)
+C
+      COMMON /ADIST/ adist, costhrnge
 
 

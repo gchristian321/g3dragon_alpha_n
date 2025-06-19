@@ -21,12 +21,16 @@ C.
       include 'res.inc'             !local
       include 'beamcom.inc'         !local
       include 'rescom.inc'          !local
+      include 'uevent.inc'          !local
       include 'history.inc'
       include 'gammahit.inc'
 
 C.
       REAL sig, lm1, lm2, angdist, weight, ener
       EXTERNAL sig, angdist !, alphapos
+      REAL angdist1, angdist2, angdist3
+      EXTERNAL angdist1, angdist2, angdist3
+      REAL cthl, cthh
 
 C.
       INTEGER i, n, istat, nstrip, nlines
@@ -296,7 +300,23 @@ C.        CALL hbook1(n+2,'y-strip hit pattern',16,0.,16.,0.0)
 
 C.    user defined angular distribution
 
-          CALL hbfun1(250,'ang. dist.',1000,-1.,1.,angdist)
+      print*,"ANGULAR DIST (opt,min,max):",adist,costhrnge
+      if (adist.eq.0) then
+         CALL hbfun1(250,'ang. dist.',1000,-1.,1.,angdist)
+      else
+         cthl = costhrnge(1)
+         cthh = costhrnge(2)
+         if(adist.eq.1) then
+            CALL hbfun1(250,'ang. dist.',1000,cthl,cthh,angdist1)
+         else if(adist.eq.2) then
+            CALL hbfun1(250,'ang. dist.',1000,cthl,cthh,angdist2)
+         else if(adist.eq.3) then
+            CALL hbfun1(250,'ang. dist.',1000,cthl,cthh,angdist3)
+         else
+            print*,"BAD angdist options",adist,costhrnge
+            STOP 1
+         endif
+      endif
 
 C.    cross-section function and probability density
         lm1 = (1.-0.005)*beamo*m2/(m1+m2)

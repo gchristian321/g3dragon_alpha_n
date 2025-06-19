@@ -49,6 +49,14 @@ C *** Using a negative value of the reaction number loads that reaction and
 C *** tune, but passes the beam rather than recoils.
  
       CALL ffkey('FKIN',LKINE ,11,'MIXED')
+
+C*** Set the angular distrubtion option
+C*** adist = 0 --> full angular distribution
+C*** adist = 1 --> restrict angular distribution
+      adist = 0
+      costhrnge(1) = -1.
+      costhrnge(2) = 1.
+      CALL ffkey('ANGD', ADIST, 3, 'MIXED')
 C.
 C*** Define the reference tune specifying reference energy(MeV), atomic#,charge
       CALL ffkey('TUNE',refenerg,3,'REAL')
