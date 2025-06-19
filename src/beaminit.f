@@ -13,7 +13,8 @@
       REAL*4 gamma,beta,totmass,eint,excit,ereccm,toten,momm,betacm,
      +       gamcm,
      +       erec, trec, treco, eloss, e0rec, pcm, neutmass, treco0,
-     +       Bref, Eref, cmag, Btun, Etun, Atun, bscl0, escl0
+     +       Bref, Eref, cmag, Btun, Etun, Atun, bscl0, escl0, energscl,
+     +       C_, B_, A_
       Integer*4 itrktyp, nubuf, i
       character*20 state
 C
@@ -328,7 +329,12 @@ C  scaled recoil tune
      +  sqrt((recoilenerg/Atun + (recoilenerg/Atun)**2/(2*amumev))
      +       * (Atun/refq)**2 / cmag) * 1E4
         Etun = 2468.*(Btun/1E4)**2/(Atun/fkine(2))
-        
+
+C  Calculate centered recoil energy with scaled tune
+        A_ = 1/(2*amumev)
+        B_ = 1
+        C_ = -1 * cmag * (fkine(2) * (Bref*bscale) / Atun)**2
+        energscl = ((-B_ + sqrt(B_**2 - 4*A_*C_)) / (2*A_)) * Atun / 1E3
         
 C.----- Trick to make beam particles get through if needed 
 C.  ----- (rescale Electric Dipoles)
@@ -343,6 +349,7 @@ C. -----
         write(6,*) ' Initial (B, E)scale:', bscl0, escl0
         write(6,*) 'Magnetic element scale factor ',bscale
         write(6,*) 'Bref * bscale ', Bref*bscale
+        write(6,*) 'Final centered recoil energy', energscl
         write(6,*) 'Electric element scale factor ',escale
         write(6,*) 'Eref * escale ', Eref*escale
         write(6,*)'++++++++++++++++++++++++++++++++++++++++++++++++'
