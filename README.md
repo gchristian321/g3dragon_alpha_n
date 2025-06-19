@@ -71,10 +71,41 @@ To find these printouts easily do:
 the beam energy manually.** Hence, simulaitons of (a,n) equations should always use
 this option.
 
+## Angular distribution options
+### 2025/06/19
+This version adds some options to set angular distributions (center of mass)
+using the ANGD variable in ffcards options are:
+```
+ANGD 0 <ignored> <ignored>
+```
+--> isotropic over full range of center of mass angles
 
-**It is only recommended to use this version for specific 22Ne(a,n) simulations!!**
+```
+ANGD 1 <min> <max>
+```
+--> isotropic with cos(THETA_CM) limited to <max> -> <min> range
 
-Ordinary README for DRAGON GEANT3 proceeds below...
+```
+ANGD 2 <min> <max>
+```
+--> dipole with cos(THETA_CM) limited to <max> -> <min> range
+
+```
+ANGD 3 <min> <max>
+```
+--> quadrupole with cos(THETA_CM) limited to <max> -> <min> range
+
+If you want dipole or quadrupole over the full range of angles, then set <min> = -1, <max> = 1, e.g.:
+```
+ANGD 2 -1. 1.
+```
+
+BE SURE TO INCLUDE THE DECIMAL on the ranges to make them floating point!!
+
+
+# **It is only recommended to use this version for specific 22Ne(a,n) simulations!!**
+
+# Ordinary README for DRAGON GEANT3 proceeds below...
 
 
 # Geant3
