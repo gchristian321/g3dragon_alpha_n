@@ -59,7 +59,7 @@ C      ( 9) 23Mg(p,g)24Al                                              C
 C      (10) 26mAl(p,g)27Si                                             C
 C      (11) 7Be(p,g)8B                                                 C
 C      (12) 21Na(d,n)22Mg
-C      (13) 22Na(a,n)25Mg 11.83(gs)                                    C
+C      (13) 13C(a,n)16O                                    C
 C      (14) 23Na(p,g)24Mg 2+                                           C
 C      (15) 20Ne(p,g)21Na nonres
 C      (16) 20Na(p,g)21Mg131                                           C
@@ -709,83 +709,67 @@ C
         write(6,*)' 100% to gs  + neutron'
       case(13)
 C
-C       ' (13) 22Ne(a,n)25Mg (gs) '
+C       ' (13) 13C(a,n)16O '
+C       fkine(4) --> excitation energy
 C
-        zbeam = 10.
-        abeam = 22.
+        zbeam = 6.
+        abeam = 13.
         atarg =  4.
-        zprod = 12
+        zprod = 8.
         aprod = atarg + abeam
         targmass = hemass
 C
 C--     create beam particle --> idpart = 80
 C
-       	devmass = -8024.7202E-06
-       	aamass  = abeam*amugev + devmass
+        elevel  = fkine(3)
+       	devmass = 3125.0092E-06
+        aamass  = abeam*amugev + devmass
         tlif    = 1000.
         ubuf(1) = fkine(1)
 C
-        CALL gspart(80,'Ne22',8,aamass,zbeam,tlif,ubuf,nubuf)
+        CALL gspart(80,'C13',8,aamass,zbeam,tlif,ubuf,nubuf)
 C
-C--     resonant level populated --> idpart = 81
+C--     non-resonant level populated --> idpart = 81
 C
-        tlif     = hbar/0.931e-3 ! Jaeger 1.1keV lab->0.931 CM
-        resenerg = 1.213
+        tlif     = hbar/10e-3 !10 KeV width
+
+        resenerg = 0
         reswidth = hbar/tlif
-        aamass   = aamass + resenerg/1000. + hemass
-C        aamass = sqrt((aamass+targmass)**2 + 2.*targmass*beamenerg*.001)
+        print*,'aamass(0),resenerg,reswidth',aamass, resenerg, reswidth
+        aamass = sqrt((aamass+targmass)**2 + 2.*targmass*beamenerg*.001)
+        print*,"aamass(1),targmass: ",aamass,targmass
         ubuf(1)  = fkine(2)
 C
-        CALL gspart(81,'nonres_Mg26_',8,aamass,zprod,tlif,ubuf,nubuf)
+        CALL gspart(81,'nonres_17O_',8,aamass,zprod,tlif,ubuf,nubuf)
 C
-C--     Define states in Mg25  from neutron decays from resonance
+C--     Define states in 16O  from neutron decays
 C
-        devmass = -13192.785E-6
-        prodm   = (aprod-1)*amugev + devmass !gs of 25Mg
-        write(6,*) "25Mg MASS: ", prodm
+        elevel = fkine(3)
+        devmass = -4737.0019E-6
+        prodm   = (aprod-1)*amugev + devmass + elevel/1E3 !13C
+        write(6,*) "16O* MASS: ", prodm
 C
-
-c$$$        elevel  = 0.
-c$$$
-c$$$        aamass1  = prodm + elevel/1000.
-c$$$        if(aamass .lt. aamass1) 
-c$$$     &  write(6,*) "Beam energy below 2+ threshold"
-c$$$        tlif    = 1000
-c$$$C
-c$$$        CALL gspart(82,'Mg24_2+_2',8,aamass1,zprod,tlif,ubuf,nubuf)
-c$$$C--     ground state --> idpart = 93
-c$$$C
-
-        irecoil=82
-        tlif   = 1000.
+        if(abs(elevel).le.1E-6) then ! GS
+           irecoil=82
+           tlif   = 1000.
 C
-        CALL gspart(82,'Mg25_gs',8,prodm,zprod,tlif,ubuf,nubuf)
+           CALL gspart(82,'',8,prodm,zprod,tlif,ubuf,nubuf)
 C
 C--     branch info -- resonance decays
 C
 C     particle 13 is the neutron
-        brat(1)= 100.
-        mode(1)= 13+100*82
-        CALL uzero(brat,2,6)
-        CALL uzero(mode,2,6)
-        CALL gsdk(81,brat,mode)
-C
-C
-
-c$$$
-
-C        brat(1) = 100.
-c$$$        mode(1) = 1 + 100*82
-c$$$
-c$$$C
-c$$$        CALL uzero(brat,2,6)
-c$$$        CALL uzero(mode,2,6)
-c$$$C
-c$$$        CALL gsdk(82,brat,mode)
-C
-C
-        write(6,*)'|**** 22Ne(a,n)25Mg reaction ****|'
-        write(6,*)' 100% to gs'
+           brat(1)= 100.
+           mode(1)= 13+100*82
+           CALL uzero(brat,2,6)
+           CALL uzero(mode,2,6)
+           CALL gsdk(81,brat,mode)
+           write(6,*)'|**** 13C(a,n)16O reaction ****|'
+           write(6,*)' 100% to gs'
+        Else
+           write(6,*) 'ERROR: bad fkine(3) [elevel]',elevel
+           write(6,*) 'Valid are: 0.0, 6.049, 6.130'
+           STOP
+        Endif
 C
       case(14)
 C

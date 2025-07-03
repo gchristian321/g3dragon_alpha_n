@@ -49,6 +49,7 @@ C center of target
         else
            eres0 = ((beammass+targmass)/targmass)*.001 !! non-relativistic transformation from lab to CM 1.213E-3
         endif
+        print*, 'vv prodm,targmass,prodm/targmass,eres0 vv'
         print*, prodm,targmass,prodm/targmass,eres0
         e0beam = (resmass-beammass-targmass)*(resmass+beammass+targmass)
      &   /(2.0*targmass)
@@ -194,6 +195,7 @@ C. -----
             eres0 = prodm/targmass*0.001
          else
             eres0 = ((beammass+targmass)/targmass)*.001 !! non-relativistic transformation from lab to CM 1.213E-3
+            print*,'eres0:::',eres0
          endif
          imate = mtarg
          partid = 80

@@ -190,6 +190,15 @@ C.
 C.
       IF (LKINE.NE.19) THEN
       eres = eres0*(resenerg + rndm(1)*reswidth)
+C      print*,'eres_,eres0',eres,eres0,resenerg,reswidth
+      ENDIF
+      IF (LKINE.EQ.13) THEN
+C     Make reaction happen at random point in target (non-resonant)
+         call grndm(rndm,2)
+         eres = beame - rndm(1)*(0.00620168169*2*6.14136028)
+         eres = beamenerg- rndm(1)*(beamenerg-beamo)
+         eres = 0.001*eres
+C         print*,'beamenerg,beamo,eres',beamenerg,beamo,eres
       ENDIF
       IF(LKINE.GE.19) THEN
  888     xx = hrndm1(501)
