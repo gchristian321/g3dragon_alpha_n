@@ -746,18 +746,17 @@ C--     Define states in 16O  from neutron decays
 C
         elevel = fkine(3)
         devmass = -4737.0019E-6
-        prodm   = (aprod-1)*amugev + devmass + elevel/1E3 !13C
+        prodm   = (aprod-1)*amugev + devmass !16O(gs)
         write(6,*) "16O* MASS: ", prodm
 C
+C     neutron decay to state in 16O
+C     particle 13 is the neutron
+C     Decide what to do next based on elevel, set from fkine(3)
         if(abs(elevel).le.1E-6) then ! GS
            irecoil=82
            tlif   = 1000.
-C
-           CALL gspart(82,'',8,prodm,zprod,tlif,ubuf,nubuf)
-C
-C--     branch info -- resonance decays
-C
-C     particle 13 is the neutron
+           CALL gspart(82,'16O_i',8,prodm+elevel/1E3,
+     &          zprod,tlif,ubuf,nubuf)
            brat(1)= 100.
            mode(1)= 13+100*82
            CALL uzero(brat,2,6)
@@ -765,6 +764,55 @@ C     particle 13 is the neutron
            CALL gsdk(81,brat,mode)
            write(6,*)'|**** 13C(a,n)16O reaction ****|'
            write(6,*)' 100% to gs'
+
+        Else if(abs(elevel - 6.13).le.0.001)then !6.13 MeV 2nd excited state
+C     First neutron decay to 6.13 MeV state
+           tlif   = 18.4E-12
+           CALL gspart(82,'16O_i',8,prodm+elevel/1E3,
+     &          zprod,tlif,ubuf,nubuf)
+           brat(1)= 100.
+           mode(1)= 13+100*82
+           CALL uzero(brat,2,6)
+           CALL uzero(mode,2,6)
+           CALL gsdk(81,brat,mode)
+
+C     Then gamma decay to 16O(gs)
+           irecoil = 83
+           tlif = 1000.
+           CALL gspart(83,'16O_f',8,prodm,
+     &          zprod,tlif,ubuf,nubuf) !16O(gs)
+           brat(1) = 100.
+           mode(1) = 1+100*83
+           CALL uzero(brat,2,6)
+           CALL uzero(mode,2,6)
+           CALL gsdk(82,brat,mode)
+           write(6,*)'|**** 13C(a,n)16O reaction ****|'
+           write(6,*)' 100% to 6.13 MeV -->(gamma)--> gs'
+
+        Else if(abs(elevel - 6.049).le.0.001)then !6.049 MeV 1st excited state
+C     First neutron decay to 6.049 MeV state
+           tlif   = 67E-12
+           CALL gspart(82,'16O_i',8,prodm+elevel/1E3,
+     &          zprod,tlif,ubuf,nubuf)
+           brat(1)= 100.
+           mode(1)= 13+100*82
+           CALL uzero(brat,2,6)
+           CALL uzero(mode,2,6)
+           CALL gsdk(81,brat,mode)
+
+C     Then e+ - e- decay to 16O(gs)
+C     positrion is 2, electron is 3
+           irecoil = 83
+           tlif = 1000.
+           CALL gspart(83,'16O_f',8,prodm,
+     &          zprod,tlif,ubuf,nubuf) !16O(gs)
+           brat(1) = 100.
+           mode(1) = 2 + 100*3 + 10000*83
+           CALL uzero(brat,2,6)
+           CALL uzero(mode,2,6)
+           CALL gsdk(82,brat,mode)
+           write(6,*)'|**** 13C(a,n)16O reaction ****|'
+           write(6,*)' 100% to 6.049 MeV -->(e+- e-)--> gs'
         Else
            write(6,*) 'ERROR: bad fkine(3) [elevel]',elevel
            write(6,*) 'Valid are: 0.0, 6.049, 6.130'
