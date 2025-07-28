@@ -322,11 +322,23 @@ C.      DSSSD hit-pattern
          xhi = -(float(nstrip)/2.)*pitch + float(i)*pitch
          if (xd_endv(1).ge.xlo.and.xd_endv(1).lt.xhi) then
           CALL hfill(401,float(i),0.0,1.0)
+          dsssdpos = 5
+          xtest(dsssdpos) = float(i)
+C          print*,"PRx:",i,xtest(5)
          endif
          if (xd_endv(2).ge.xlo.and.xd_endv(2).lt.xhi) then
           CALL hfill(402,float(i),0.0,1.0)
+          dsssdpos = 5
+          ytest(dsssdpos) = float(i)
+C          print*,"PRy:",i,ytest(5)
          endif
         enddo
+        dsssdpos = 5
+        etest(dsssdpos) = trec
+        dsssdpos = 6
+        etest(dsssdpos) = tphd
+C        print*,"PRe:",trec,tphd,etest(5),xtest(5),ytest(5),etest(6)
+
 C.
         CALL hfill(11, xd_endv(1),0.0,1.0)
         CALL hfill(12, xd_endv(2),0.0,1.0)
