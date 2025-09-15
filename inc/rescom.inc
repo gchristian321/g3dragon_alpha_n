@@ -8,3 +8,6 @@ C  RESCOM
      + ires,erescm, rmass, resmass, targmass, alpha
 C
 
+      REAL ptorr, ttemp
+C
+      COMMON /PTORR/ ptorr, ttemp

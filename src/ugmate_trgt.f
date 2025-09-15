@@ -48,6 +48,8 @@ C     Helium
       endif
 C
 C     Target pressure
+      print*,'ptorr: ', ptorr, ttemp
+
       ptarg = 4.87/760.
       targetl = 5.5
       exitdens = targetl

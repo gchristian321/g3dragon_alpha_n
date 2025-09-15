@@ -49,7 +49,7 @@ C *** Using a negative value of the reaction number loads that reaction and
 C *** tune, but passes the beam rather than recoils.
  
       CALL ffkey('FKIN',LKINE ,11,'MIXED')
-
+      CALL ffkey('PTOR',PTORR,2,'REAL')
 C*** Set the angular distrubtion option
 C*** adist = 0 --> full angular distribution
 C*** adist = 1 --> restrict angular distribution
