@@ -14,7 +14,7 @@ C ========== TRIG: NEVENT ==========
 C
 C == NEVENT ==  Number of events to be processed
 C
-TRIG 100
+TRIG 1
 C
 C ========== TIME: TIMINT TIMEND ITIME    ==========
 C == TIMINT  == Time used for initialization
@@ -259,6 +259,10 @@ C options: 0 --> full angular distribution
 C          1 --> limit to range given in next 2 args
 C 0 -1 1 gives full isotropic
 ANGD 0 -1. 1.
+C
+C set target pressure (torr), temperature (kelvin)
+PTOR 4.5 300.2
+C
 C REFERENCE TUNE E=1.8885 MeV, A=19, Q=4
 TUNE 1.8885 19. 4.
 C    MTUN x(cm) y(cm) dx(rad) dy(rad) separator tune(%/100)
