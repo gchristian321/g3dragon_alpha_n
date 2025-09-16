@@ -37,20 +37,24 @@ C     Target materials (1 atm 20 deg C)
       if(atarg.lt.1.2)then
 C     Hydrogen
          z = 1
-         dens = 8.38E-5
+         dens = 8.38E-5 * 293.15 / ttemp
          radl = 752300
       else
 C     Helium
          z = 2
          a = 4.0026
-         dens = 1.6586E-4
+         dens = 1.6586E-4 * 293.15 / ttemp
          radl = 568686
       endif
-C
+c$$$      print*,'target P(torr), T(K), rho(g/cm^3): ', ptorr, ttemp, dens
+c$$$  print "(ES5.3)", dens
+      print '(A, F10.4, 1X, F10.4, 1X, E12.5)',
+     &     'target P(torr), T(K), rho(g/cm^3): ',
+     &     ptorr, ttemp, dens
+C     
 C     Target pressure
-      print*,'ptorr: ', ptorr, ttemp
-
-      ptarg = 4.87/760.
+      ptarg = ptorr/760.
+C      ptarg = 4.87/760.
       targetl = 5.5
       exitdens = targetl
       entdens = targetl
