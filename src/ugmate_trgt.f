@@ -46,8 +46,7 @@ C     Helium
          dens = 1.6586E-4 * 293.15 / ttemp
          radl = 568686
       endif
-c$$$      print*,'target P(torr), T(K), rho(g/cm^3): ', ptorr, ttemp, dens
-c$$$  print "(ES5.3)", dens
+C
       print '(A, F10.4, 1X, F10.4, 1X, E12.5)',
      &     'target P(torr), T(K), rho(g/cm^3): ',
      &     ptorr, ttemp, dens
