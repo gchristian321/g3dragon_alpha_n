@@ -43,13 +43,10 @@ C     Hydrogen
 C     Helium
          z = 2
          a = 4.0026
-         dens = 1.6586E-4 * 293.15 / ttemp
+C         dens = 1.6586E-4 * 293.15 / ttemp
+         dens = 1.6639E-4 * 293.15 / ttemp !old density not correct @20C
          radl = 568686
       endif
-C
-      print '(A, F10.4, 1X, F10.4, 1X, E12.5)',
-     &     'target P(torr), T(K), rho(g/cm^3): ',
-     &     ptorr, ttemp, dens
 C     
 C     Target pressure
       ptarg = ptorr/760.
@@ -57,6 +54,12 @@ C      ptarg = 4.87/760.
       targetl = 5.5
       exitdens = targetl
       entdens = targetl
+      tdens = ptarg*dens        !expose to common block
+C
+      print '(A, F10.4, 1X, F10.4, 1X, E12.5)',
+     &     'target P(torr), T(K), rho(g/cm^3): ',
+     &     ptorr, ttemp, dens, tdens
+
 C
 C     Solid target, still want to set mtarg
       if(atarg.eq.12.)then

@@ -27,7 +27,7 @@ C===
       REAL delx/ 0.25 /, dely/ 0.25 /
 C
       INTEGER imate, partid, ixst
-      REAL dedx, pcut(5) , beamm
+      REAL dedx, pcut(5) , beamm, dedx_eVcm2
 C.
       REAL*4 etaref,etatune
 
@@ -204,12 +204,24 @@ C. -----
          betagamma = beamvel/clight*gamma
          beamo = beamenerg - dedx*entdens*2.
          beamm = beamenerg - dedx*entdens
+         if (atarg.lt.1.2)then
+C     Hydrogen, mmass = 2.0159 (for H2 molecule)
+            dedx_eVcm2 = 1.E15*(dedx/tdens)*2.0159/6.02214076E+17
+         else
+C     Helium, mmass = 4.0026            
+            dedx_eVcm2 = 1.E15*(dedx/tdens)*4.0026/6.02214076E17
+         endif
 C.
          write(6,*) '+++++++++++++++BEAM AND TARGET+++++++++++++++++'
+         write(6,*) '!!! Stopping powers/energies are WITHOUT',
+     &        'user scaling!!!'
          write(6,*) 'Beam energy    ',beamenerg,' MeV',' Momentum ',
      &   beammom, ' MeV/c'
          write(6,*) 'Gas half thickness',entdens, ' cm'
+         write(6,*) 'Gas pressure (T), temp (K), density(g/cm3)',
+     &        ptorr,ttemp,tdens
          write(6,*) 'dE/dx in target  ',dedx,' MeV/cm'
+         write(6,*) '              =  ',dedx_eVcm2,' eVcm^2/1E15'
          write(6,*) 'Beam energy at target exit ',beamo,' MeV'
          write(6,*) 'Beam energy at target centre ',beamm,' MeV'
          write(6,*) '+++++++++++++++++++++++++++++++++++++++++++++++'
