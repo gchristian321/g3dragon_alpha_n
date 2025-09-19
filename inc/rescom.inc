@@ -11,3 +11,8 @@ C
       REAL ptorr, ttemp, tdens
 C
       COMMON /PTORR/ ptorr, ttemp, tdens
+
+
+      REAL dedx_scl_b, dedx_scl_r
+      COMMON /DEDXSCL/ dedx_scl_b, dedx_scl_r
+      

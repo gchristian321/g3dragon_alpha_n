@@ -16,7 +16,8 @@ C.
       include 'uevent.inc'          !local  lkine, fkine  
       include 'geometry.inc'        !local
       include 'uenergy.inc'         !local
-      include 'beamcom.inc'          !local
+      include 'beamcom.inc'     !local
+      include 'rescom.inc'
 C.
       CHARACTER*120 CARDNAME
       CHARACTER*6 FFCARDS
@@ -49,7 +50,10 @@ C *** Using a negative value of the reaction number loads that reaction and
 C *** tune, but passes the beam rather than recoils.
  
       CALL ffkey('FKIN',LKINE ,11,'MIXED')
-      CALL ffkey('PTOR',PTORR,2,'REAL')
+      CALL ffkey('PTOR',PTORR,2,'REAL') ! target pressure(T), temp(K)
+      DEDX_SCL_B = 1.
+      DEDX_SCL_R = 1.
+      CALL ffkey('DEDX',DEDX_SCL_B,2,'REAL') ! scale de/dx for beam, recoil
 C*** Set the angular distrubtion option
 C*** adist = 0 --> full angular distribution
 C*** adist = 1 --> restrict angular distribution

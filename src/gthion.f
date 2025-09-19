@@ -22,12 +22,7 @@ C.    *   ==>Called by : GTRACK                                        *
 C.    *       Authors    R.Brun, F.Bruyant, M.Maire, L.Urban ***       *
 C.    *                                                                *
 C.    ******************************************************************
-C.
-C.    GAC 2025/09/18 expose `irecoil` variable inside rescom common block
-C.    This is for stopping power scaling.
-      INTEGER IRECOIL
-      COMMON /RESCOM/ IRECOIL
-
+C.     
       INTEGER IQ,LQ,NZEBRA,IXSTOR,IXDIV,IXCONS,LMAIN,LR1,JCG
       INTEGER KWBANK,KWWORK,IWS
       REAL GVERSN,ZVERSN,FENDQ,WS,Q
@@ -210,6 +205,24 @@ C
       REAL tam,sigma,cappa,gekint,gamma,defluc
       integer iproc,i1,ikf,ik1,ikcut,ist,jst,i,ier,inear,isame
       SAVE RMASS,CUTPRO,IKCUT,STOPC,FACFLU,CHAR23
+C.
+C.    GAC 2025/09/18 expose `irecoil` variable inside rescom common block
+C.    This is for stopping power scaling.
+C      INTEGER IRECOIL
+C      COMMON /RESCOM/ IRECOIL
+      REAL*4  dummy1,dummy2,dummy3,dummy4,dummy5,
+     +     dummy6,dummy7,dummy8,dummy9
+      Integer*4 irecoil
+      COMMON / rescom / dummy1,dummy2,dummy3,dummy4,dummy5,
+     +     dummy6,dummy7,dummy8,dummy9,irecoil
+
+C.    GAC 2025/09/19 also expose scaling factor variables
+      REAL dedx_scl_b, dedx_scl_r
+      COMMON /DEDXSCL/ dedx_scl_b, dedx_scl_r
+C.    GAC counters for print message
+      INTEGER iprintb, iprintr
+      SAVE iprintb, iprintr
+      DATA iprintb /0/, iprintr /0/
 C.
 C.    ------------------------------------------------------------------
 *
@@ -588,16 +601,31 @@ C      ENDIF
             DEMEAN=(GEKRT1*Q(JLOSS+IEKBIN)+GEKRAT*Q(JLOSS+IEKBIN+1))
      +             *STEP*CHARG2
          ENDIF
-         
 C===  BEGIN: per-{material,particle} scaling [GAC 2025/09/18]============
 C     27 --> material ID for gas target
 C     80 --> material ID for 22Ne beam
 C     irecoil --> material ID for recoil
          IF (JMA .EQ. LQ(JMATE-27)) THEN
             IF (IPART .EQ. 80) THEN
-               DEMEAN = DEMEAN * 1.2
+               if (iprintb.lt.10) then
+                  print*,'BEAM: DEMEAN PRE SCALE: ', DEMEAN, iprintb
+               endif
+               DEMEAN = DEMEAN * dedx_scl_b
+               if (iprintb.lt.10) then
+                  print*,'BEAM: DEMEAN POST SCALE:', DEMEAN,
+     &                 dedx_scl_b, iprintb
+                  iprintb = iprintb + 1
+               endif
             ELSE IF (IPART .EQ. IRECOIL) THEN
-               DEMEAN = DEMEAN * 0.8
+               if (iprintr.lt.10) then
+                  print*,'RECOIL: DEMEAN PRE SCALE: ', DEMEAN, iprintr
+               endif
+               DEMEAN = DEMEAN * dedx_scl_r
+               if (iprintr.lt.10) then
+                  print*,'RECOIL: DEMEAN POST SCALE:', DEMEAN,
+     &                 dedx_scl_r, iprintr
+                  iprintr = iprintr + 1
+               endif
             ENDIF
          ENDIF
 C===  END: per-{material,particle} scaling ===========================

@@ -8,13 +8,13 @@ C ========== RUNG: IDRUN IDEVT [1,0]
 C == IDRUN ==   User run number
 C == IDEVT ==   User event number
 C
-RUNG 2
+RUNG 4
 C
 C ========== TRIG: NEVENT ==========
 C
 C == NEVENT ==  Number of events to be processed
 C
-TRIG 1
+TRIG 10
 C
 C ========== TIME: TIMINT TIMEND ITIME    ==========
 C == TIMINT  == Time used for initialization
@@ -261,7 +261,9 @@ C 0 -1 1 gives full isotropic
 ANGD 0 -1. 1.
 C
 C set target pressure (torr), temperature (kelvin)
-PTOR 4.5 300.2
+PTOR 4.5 310.
+C set scaling factor for de/dx [beam, target]
+C DEDX 1. 1.
 C
 C REFERENCE TUNE E=1.8885 MeV, A=19, Q=4
 TUNE 1.8885 19. 4.
