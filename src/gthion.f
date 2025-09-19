@@ -1,6 +1,10 @@
 CDECK  ID>, GTHION. 
 *CMZ :  3.21/02 03/07/94  17.58.49  by  S.Giani
-*-- Author :
+*--   Author :
+C.    This version modified by GAC 2025-09-18, to allow scaling of DEDX by an
+C.    user-selected value. The idea is to run simulations with stopping powers
+C.    that match those measured in experiments.
+C.    
       SUBROUTINE GTHION
       IMPLICIT NONE
 C.
@@ -19,6 +23,11 @@ C.    *       Authors    R.Brun, F.Bruyant, M.Maire, L.Urban ***       *
 C.    *                                                                *
 C.    ******************************************************************
 C.
+C.    GAC 2025/09/18 expose `irecoil` variable inside rescom common block
+C.    This is for stopping power scaling.
+      INTEGER IRECOIL
+      COMMON /RESCOM/ IRECOIL
+
       INTEGER IQ,LQ,NZEBRA,IXSTOR,IXDIV,IXCONS,LMAIN,LR1,JCG
       INTEGER KWBANK,KWWORK,IWS
       REAL GVERSN,ZVERSN,FENDQ,WS,Q
@@ -579,6 +588,20 @@ C      ENDIF
             DEMEAN=(GEKRT1*Q(JLOSS+IEKBIN)+GEKRAT*Q(JLOSS+IEKBIN+1))
      +             *STEP*CHARG2
          ENDIF
+         
+C===  BEGIN: per-{material,particle} scaling [GAC 2025/09/18]============
+C     27 --> material ID for gas target
+C     80 --> material ID for 22Ne beam
+C     irecoil --> material ID for recoil
+         IF (JMA .EQ. LQ(JMATE-27)) THEN
+            IF (IPART .EQ. 80) THEN
+               DEMEAN = DEMEAN * 1.2
+            ELSE IF (IPART .EQ. IRECOIL) THEN
+               DEMEAN = DEMEAN * 0.8
+            ENDIF
+         ENDIF
+C===  END: per-{material,particle} scaling ===========================
+         
 *
 *        fluctuations : differ from that of 'ordinary' hadrons
 *
