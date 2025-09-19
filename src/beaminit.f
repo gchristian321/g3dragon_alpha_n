@@ -220,8 +220,13 @@ C.
          write(6,*) 'Gas half thickness',entdens, ' cm'
          write(6,*) 'Gas pressure (T), temp (K), density(g/cm3)',
      &        ptorr,ttemp,tdens
+         write(6,*) '!!!UNSCALED DEDX!!!'
          write(6,*) 'dE/dx in target  ',dedx,' MeV/cm'
          write(6,*) '              =  ',dedx_eVcm2,' eVcm^2/1E15'
+         write(6,*) '!!!SCALED DEDX!!!'
+         write(6,*) 'dE/dx in target  ',dedx*dedx_scl_b,' MeV/cm'
+         write(6,*) '              =  ',dedx_eVcm2*dedx_scl_b,
+     &        ' eVcm^2/1E15'
          write(6,*) 'Beam energy at target exit ',beamo,' MeV'
          write(6,*) 'Beam energy at target centre ',beamm,' MeV'
          write(6,*) '+++++++++++++++++++++++++++++++++++++++++++++++'
@@ -284,13 +289,28 @@ C        print*, momm, betacm, gamcm, erec, trec
 		treco0 = treco
         treco = treco*(1.+energscale)
         recoilmom = 1000*(sqrt((treco + prodm)**2 - prodm**2))
+C     Change units of stopping power for printout (GAC)
+        if (atarg.lt.1.2)then
+C     Hydrogen, mmass = 2.0159 (for H2 molecule)
+           dedx_eVcm2 = 1.E15*(dedx/tdens)*2.0159/6.02214076E+17
+        else
+C     Helium, mmass = 4.0026            
+           dedx_eVcm2 = 1.E15*(dedx/tdens)*4.0026/6.02214076E17
+        endif
+
         write(6,*) '++++++++++++++++RECOIL+++++++++++++++++++++++' 
         write(6,*) 'CM, Lab resonance energy', resenerg,
      +            (resenerg*(beammass+targmass)/targmass)
         write(6,*)'Recoil Mean Energy at target centre (90 deg gamma)',
      +            trec*1000.,' MeV'
         write(6,*)  'Gas half thickness',exitdens,' cm'
-        write(6,*)   'dE/dx in target   ',dedx   ,' MeV/cm'
+        write(6,*) '!!!UNSCALED DEDX!!!'
+        write(6,*) 'dE/dx in target  ',dedx,' MeV/cm'
+        write(6,*) '              =  ',dedx_eVcm2,' eVcm^2/1E15'
+        write(6,*) '!!!SCALED DEDX!!!'
+        write(6,*) 'dE/dx in target  ',dedx*dedx_scl_r,' MeV/cm'
+        write(6,*) '              =  ',dedx_eVcm2*dedx_scl_r,
+     &       ' eVcm^2/1E15'
         write(6,*)'++++++++++++++++++++++++++++++++++++++++++++++++'
         write(6,*)   'Recoil Mean Energy leaving target [90 deg CM]'
      + , treco0*1000., ' MeV',   ' Momentum',recoilmom,' MeV/c'
