@@ -261,7 +261,7 @@ C 0 -1 1 gives full isotropic
 ANGD 0 -1. 1.
 C
 C set target pressure (torr), temperature (kelvin)
-PTOR 4.5 310.
+CPTOR 4.80 303.6
 C set scaling factor for de/dx [beam, target]
 C DEDX 1. 1.
 C

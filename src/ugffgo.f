@@ -50,6 +50,8 @@ C *** Using a negative value of the reaction number loads that reaction and
 C *** tune, but passes the beam rather than recoils.
  
       CALL ffkey('FKIN',LKINE ,11,'MIXED')
+      PTORR=5.
+      TTEMP=293.15
       CALL ffkey('PTOR',PTORR,2,'REAL') ! target pressure(T), temp(K)
       DEDX_SCL_B = 1.
       DEDX_SCL_R = 1.
