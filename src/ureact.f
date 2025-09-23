@@ -95,6 +95,7 @@ C--  ground state              irecoil < 100
 C--
 C=======================================================================
 C
+      ilight = 1 ! default to radiative capture, light particle is gamma
       ireaction = abs(lkine)
 C
       Select case (ireaction)
@@ -717,6 +718,7 @@ C
         zprod = 12
         aprod = atarg + abeam
         targmass = hemass
+        ilight = 13             !neutron emission
 C
 C--     create beam particle --> idpart = 80
 C

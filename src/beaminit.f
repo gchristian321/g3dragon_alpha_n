@@ -44,7 +44,7 @@ C center of target
         CALL gfpart(80,state,itrktyp,beammass,beamz,tlif,ubuf,nubuf)
         CALL gfpart(81,state,itrktyp,resmass,resz,tlif,ubuf,nubuf)
         print*, '***', targmass, resmass, beammass, resenerg, prodm
-        if(lkine.ne.13) then
+        if(ilight.ne.13) then
            eres0 = (prodm/targmass)*.001 !! non-relativistic transformation from lab to CM 
         else
            eres0 = ((beammass+targmass)/targmass)*.001 !! non-relativistic transformation from lab to CM 1.213E-3
@@ -190,7 +190,7 @@ C. -----
               print*, '********** Using BEAM FFCARD **********'
             CALL gfpart(80,state,itrktyp,beammass,beamz,tlif,ubuf,nubuf)
               CALL gfpart(81,state,itrktyp,resmass,resz,tlif,ubuf,nubuf)
-         if(lkine.ne.13) then
+         if(ilight.ne.13) then
             eres0 = prodm/targmass*0.001
          else
             eres0 = ((beammass+targmass)/targmass)*.001 !! non-relativistic transformation from lab to CM 1.213E-3
