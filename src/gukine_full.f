@@ -188,11 +188,21 @@ C.--> ERES in MeV
 C.
        CALL granor(rndm(1),rndm(2))
 C     .
-C     TODO Modify here --> need nonres flag (GAC) c.f. 13C(a,n) file
+C     TODO Modify here --> need nonres flag (GAC) c.f. 13C(a,n) file       
       IF (LKINE.NE.19) THEN
       eres = eres0*(resenerg + rndm(1)*reswidth)
       ENDIF
-      IF(LKINE.GE.19) THEN
+      IF (NONRES) THEN
+C     Make reaction happen at random point in target (non-resonant)
+C     TODO has hard coded stopping power
+         call grndm(rndm,2)
+         eres = beame - rndm(1)*(0.00620168169*2*6.14136028)
+         eres = beamenerg- rndm(1)*(beamenerg-beamo)
+         eres = 0.001*eres
+C         print*,'beamenerg,beamo,eres',beamenerg,beamo,eres
+      ENDIF
+      IF(LKINE.GE.19.AND.LKINE.LT.22) THEN
+C      IF(LKINE.GE.19) THEN
  888     xx = hrndm1(501)
 C.         xx = 0.01 !CR adds way to let beam never react, uncomment if needed
       eres = eres0*xx
