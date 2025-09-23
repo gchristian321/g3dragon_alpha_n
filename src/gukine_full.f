@@ -187,7 +187,8 @@ C.
 C.--> ERES in MeV
 C.
        CALL granor(rndm(1),rndm(2))
-C.
+C     .
+C     TODO Modify here --> need nonres flag (GAC) c.f. 13C(a,n) file
       IF (LKINE.NE.19) THEN
       eres = eres0*(resenerg + rndm(1)*reswidth)
       ENDIF

@@ -1368,8 +1368,116 @@ C     alpha source
         tlif = 1000.
         CALL gspart(80,'Alpha',8,aamass,2.0,tlif,ubuf,nubuf)
 
+C     43K(p,n)43Ca
+      case(22)
+         zbeam = 19.
+         abeam = 43.
+         atarg =  1.
+         zprod = 20.
+         aprod = atarg + abeam
+         targmass = hmass
+         ilight = 13            !neutron emission
+C     
+C--   create beam particle --> idpart = 80
+C
+         elevel  = 0. !fkine(3) ! TODO Set state number??
+         devmass = -3.65753926E-02 ! 43K
+         aamass  = abeam*amugev + devmass
+         tlif    = 1000.
+         ubuf(1) = fkine(1)
+C     
+         CALL gspart(80,'K43',8,aamass,zbeam,tlif,ubuf,nubuf)
+C     
+C--   NON resonant level populated --> idpart = 81
+         tlif     = hbar/10.e-3 ! 10 keV width (non-resonant)
+         resenerg = 0 
+         reswidth = hbar/tlif
+         print*,'aamass(0),resenerg,reswidth',aamass, resenerg, reswidth
+         aamass = sqrt((aamass+targmass)**2 + 
+     &        2.*targmass*beamenerg*.001)
+         print*,"aamass(1),targmass: ",aamass,targmass
+         ubuf(1)  = fkine(2)
 
-
+         
+C     
+         CALL gspart(81,'nonres_44Ca',8,aamass,zprod,tlif,ubuf,nubuf)
+C     
+C--   Define states in 43Ca from neutron decays
+C     
+         devmass = -3.84088273E-02 ! 43Ca
+         prodm   = (aprod-1)*amugev + devmass !gs of 43Ca
+         write(6,*) "43Ca MASS, A: ", prodm, aprod-1
+C     
+C     neutron decay to state in 43Ca
+C     particle 13 is the neutron
+C     Decide what to do next based on elevel, set from fkine(3)
+         if(abs(elevel).le.1E-6) then ! GS
+            irecoil=82
+            tlif   = 1000.
+            CALL gspart(82,'43Ca_gs',8,prodm+elevel/1E3,
+     &           zprod,tlif,ubuf,nubuf)
+            brat(1)= 100.
+            mode(1)= 13+100*82
+            CALL uzero(brat,2,6)
+            CALL uzero(mode,2,6)
+            CALL gsdk(81,brat,mode)
+            write(6,*)'|**** 43K(p,n)43Ca reaction ****|'
+            write(6,*)' 100% to gs'
+c$$$
+c$$$  Else if(abs(elevel - 6.13).le.0.001)then !6.13 MeV 2nd excited state
+c$$$  C     First neutron decay to 6.13 MeV state
+c$$$  tlif   = 18.4E-12
+c$$$  CALL gspart(82,'16O_i',8,prodm+elevel/1E3,
+c$$$  &          zprod,tlif,ubuf,nubuf)
+c$$$  brat(1)= 100.
+c$$$  mode(1)= 13+100*82
+c$$$  CALL uzero(brat,2,6)
+c$$$  CALL uzero(mode,2,6)
+c$$$  CALL gsdk(81,brat,mode)
+c$$$  
+c$$$  C     Then gamma decay to 16O(gs)
+c$$$  irecoil = 83
+c$$$  tlif = 1000.
+c$$$  CALL gspart(83,'16O_f',8,prodm,
+c$$$  &          zprod,tlif,ubuf,nubuf) !16O(gs)
+c$$$  brat(1) = 100.
+c$$$  mode(1) = 1+100*83
+c$$$  CALL uzero(brat,2,6)
+c$$$  CALL uzero(mode,2,6)
+c$$$  CALL gsdk(82,brat,mode)
+c$$$  write(6,*)'|**** 13C(a,n)16O reaction ****|'
+c$$$  write(6,*)' 100% to 6.13 MeV -->(gamma)--> gs'
+c$$$  
+c$$$  Else if(abs(elevel - 6.049).le.0.001)then !6.049 MeV 1st excited state
+c$$$  C     First neutron decay to 6.049 MeV state
+c$$$  tlif   = 67E-12
+c$$$  CALL gspart(82,'16O_i',8,prodm+elevel/1E3,
+c$$$  &          zprod,tlif,ubuf,nubuf)
+c$$$  brat(1)= 100.
+c$$$  mode(1)= 13+100*82
+c$$$  CALL uzero(brat,2,6)
+c$$$  CALL uzero(mode,2,6)
+c$$$  CALL gsdk(81,brat,mode)
+c$$$  
+c$$$  C     Then e+ - e- decay to 16O(gs)
+c$$$  C     positrion is 2, electron is 3
+c$$$  irecoil = 83
+c$$$  tlif = 1000.
+c$$$  CALL gspart(83,'16O_f',8,prodm,
+c$$$  &          zprod,tlif,ubuf,nubuf) !16O(gs)
+c$$$  brat(1) = 100.
+c$$$  mode(1) = 2 + 100*3 + 10000*83
+c$$$  CALL uzero(brat,2,6)
+c$$$  CALL uzero(mode,2,6)
+c$$$  CALL gsdk(82,brat,mode)
+c$$$  write(6,*)'|**** 13C(a,n)16O reaction ****|'
+c$$$  write(6,*)' 100% to 6.049 MeV -->(e+- e-)--> gs'
+         Else
+            write(6,*) 'ERROR: case (22) 43K(p,n):',
+     &           'bad fkine(3) [elevel]',elevel,
+     &           'Valid are: 0.0, 6.049, 6.130'
+            STOP
+         Endif
 
 
          End select
