@@ -73,6 +73,7 @@ c        DO i = 1, 100
 c           beamenerg = beamenerg + eloss
           
            CALL gftmat(imate,partid,'LOSS',1,e0beam,dedx,pcut,ixst)
+           dedx = dedx *dedx_scl_b
 c           eloss = (entdens/100.)*dedx * 0.001
            
 c        ENDDO
@@ -135,6 +136,7 @@ C.
 C.
         e0rec = e0recoil
         CALL gftmat(imate,partid,'LOSS',1,e0recoil,dedx,pcut,ixst)
+        dedx = dedx * dedx_scl_r
         e0recoil = e0recoil -0.001*dedx*exitdens
         recoilenerg = e0recoil*1000.    !in MeV
         recoilenerg = recoilenerg*(1.+energscale)
@@ -198,6 +200,7 @@ C. -----
          imate = mtarg
          partid = 80
        CALL gftmat(imate,partid,'LOSS',1,beamenerg*.001,dedx,pcut,ixst)
+         dedx = dedx*dedx_scl_b
          beammom=sqrt(beamenerg*(beamenerg+2000.*beammass))
          beamvel = clight*beammom*.001/beammass
          gamma = 1.0/sqrt(1.0-(beamvel/clight)**2)
@@ -221,11 +224,12 @@ C.
          write(6,*) 'Gas pressure (T), temp (K), density(g/cm3)',
      &        ptorr,ttemp,tdens
          write(6,*) '!!!UNSCALED DEDX!!!'
-         write(6,*) 'dE/dx in target  ',dedx,' MeV/cm'
-         write(6,*) '              =  ',dedx_eVcm2,' eVcm^2/1E15'
+         write(6,*) 'dE/dx in target  ',dedx/dedx_scl_b,' MeV/cm'
+         write(6,*) '              =  ',dedx_eVcm2/dedx_scl_b,
+     &        ' eVcm^2/1E15'
          write(6,*) '!!!SCALED DEDX!!!'
-         write(6,*) 'dE/dx in target  ',dedx*dedx_scl_b,' MeV/cm'
-         write(6,*) '              =  ',dedx_eVcm2*dedx_scl_b,
+         write(6,*) 'dE/dx in target  ',dedx,' MeV/cm'
+         write(6,*) '              =  ',dedx_eVcm2,
      &        ' eVcm^2/1E15'
          write(6,*) 'Beam energy at target exit ',beamo,' MeV'
          write(6,*) 'Beam energy at target centre ',beamm,' MeV'
@@ -285,6 +289,7 @@ C        print*, totmass, beammass, targmass, eint, excit, ereccm
 C        print*, momm, betacm, gamcm, erec, trec
         partid = irecoil
         CALL gftmat(imate,partid,'LOSS',1,trec,dedx,pcut,ixst)
+        dedx = dedx * dedx_scl_r
         treco = trec - 0.001*dedx*exitdens
 		treco0 = treco
         treco = treco*(1.+energscale)
@@ -305,11 +310,12 @@ C     Helium, mmass = 4.0026
      +            trec*1000.,' MeV'
         write(6,*)  'Gas half thickness',exitdens,' cm'
         write(6,*) '!!!UNSCALED DEDX!!!'
-        write(6,*) 'dE/dx in target  ',dedx,' MeV/cm'
-        write(6,*) '              =  ',dedx_eVcm2,' eVcm^2/1E15'
+        write(6,*) 'dE/dx in target  ',dedx/dedx_scl_r,' MeV/cm'
+        write(6,*) '              =  ',dedx_eVcm2/dedx_scl_r,
+     &       ' eVcm^2/1E15'
         write(6,*) '!!!SCALED DEDX!!!'
-        write(6,*) 'dE/dx in target  ',dedx*dedx_scl_r,' MeV/cm'
-        write(6,*) '              =  ',dedx_eVcm2*dedx_scl_r,
+        write(6,*) 'dE/dx in target  ',dedx,' MeV/cm'
+        write(6,*) '              =  ',dedx_eVcm2,
      &       ' eVcm^2/1E15'
         write(6,*)'++++++++++++++++++++++++++++++++++++++++++++++++'
         write(6,*)   'Recoil Mean Energy leaving target [90 deg CM]'
