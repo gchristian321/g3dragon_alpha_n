@@ -73,9 +73,11 @@ C.    Initialize all ntuple variables
       E_n = 0.
       cost_n = 99.
       cosp_n = 99.
+      sinp_n = 99.
       E_rec = 0.
       cost_r = 99.
       cosp_r = 99.
+      sinp_r = 99.
       react = 0
       Nodec = 0
       recdet = 0
