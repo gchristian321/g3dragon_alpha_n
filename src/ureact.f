@@ -37,9 +37,256 @@ C
       CHARACTER*5 INPUT
       CHARACTER*3 targtyp
       LOGICAL fexist
+      REAL brsum
       DATA num/ '1 ','2 ','3 ','4 ','5 ','6 ','7 ','8 ','9 ','10', 
      &          '11','12','13','14','15','16','17','18','19','20',
      &          '21','22','23','24','25','26','27','28','29','30','31'/
+
+
+      
+      
+      REAL rndm(2)
+      INTEGER ilevel
+
+
+      INTEGER MAXBR, NLEV
+      PARAMETER (MAXBR=6, NLEV=18)
+
+      INTEGER St43Ca(0:NLEV-1, MAXBR)
+      REAL    Br43Ca(0:NLEV-1, MAXBR)
+      REAL    Ex43Ca(0:NLEV-1)
+
+C--   initialize padding
+      INTEGER LL, JJ
+      DO LL = 0, NLEV-1
+         DO JJ = 1, MAXBR
+            St43Ca(LL,JJ) = -1
+            Br43Ca(LL,JJ) = 0.0
+         END DO
+      END DO
+
+C-- level energies (keV)
+      DATA Ex43Ca /
+     &   0.000,   372.762,  593.394,  990.257, 1394.473,
+     &   1677.840, 1901.990, 1931.530, 1957.400, 2046.210,
+     &   2067.210, 2093.810, 2102.700, 2223.900, 2248.000,
+     &   2249.010, 2272.800, 2409.680 / !, 2523.000 /
+
+      DO JJ=1,NLEV-1 
+         Ex43Ca(JJ) = Ex43Ca(JJ)/1E3
+      ENDDO
+      
+C==================================================================
+C     Gamma decay branches for 43Ca (levels 0–18)
+C==================================================================
+
+C--   level 0 : ground state (no gammas)
+
+C--   level 1 : 372.8 keV
+      St43Ca(1,1) = 0
+      Br43Ca(1,1) = 1.0
+
+C--   level 2 : 593.4 keV
+      St43Ca(2,1) = 1           ! → 372.8
+      Br43Ca(2,1) = 0.423
+      St43Ca(2,2) = 0           ! → g.s.
+      Br43Ca(2,2) = 1.0
+
+C--   level 3 : 990.3 keV
+      St43Ca(3,1) = 1           ! → 372.8
+      Br43Ca(3,1) = 1.0
+      St43Ca(3,2) = 2           ! → 593.4
+      Br43Ca(3,2) = 0.1493
+      St43Ca(3,3) = 0           ! → g.s.
+      Br43Ca(3,3) = 0.0036
+
+C--   level 4 : 1394.5 keV
+      St43Ca(4,1) = 1           ! → 372.8
+      Br43Ca(4,1) = 1.0
+      St43Ca(4,2) = 3           ! → 990
+      Br43Ca(4,2) = 0.187
+      St43Ca(4,3) = 2           ! → 593
+      Br43Ca(4,3) = 0.075
+      St43Ca(4,4) = 0           ! → g.s.
+      Br43Ca(4,4) = 0.09
+
+C--   level 5 : 1677.8 keV
+      St43Ca(5,1) = 0
+      Br43Ca(5,1) = 1.0
+
+C--   level 6 : 1902.0 keV
+      St43Ca(6,1) = 0
+      Br43Ca(6,1) = 1.0
+      St43Ca(6,2) = 4           ! → 1394
+      Br43Ca(6,2) = 0.24
+      St43Ca(6,3) = 3           ! → 990
+      Br43Ca(6,3) = 0.19
+
+C--   level 7 : 1931.5 keV
+      St43Ca(7,1) = 0
+      Br43Ca(7,1) = 1.0
+      St43Ca(7,2) = 1           ! → 372.8
+      Br43Ca(7,2) = 0.59
+      St43Ca(7,3) = 2           ! → 593
+      Br43Ca(7,3) = 0.117
+
+C--   level 8 : 1957.4 keV
+      St43Ca(8,1) = 0           ! → 593
+      Br43Ca(8,1) = 1.0
+      St43Ca(8,2) = 3           ! → 990
+      Br43Ca(8,2) = 0.28
+
+C--   level 9 : 2046.2 keV
+      St43Ca(9,1) = 0
+      Br43Ca(9,1) = 1.0
+      St43Ca(9,2) = 1           ! → 372.8
+      Br43Ca(9,2) = 0.32
+      St43Ca(9,3) = 2           ! → 593
+      Br43Ca(9,3) = 0.13
+      St43Ca(9,4) = 3           ! → 990
+      Br43Ca(9,4) = 0.11
+      St43Ca(9,5) = 4           ! → 1394
+      Br43Ca(9,5) = 0.02
+
+C--   level 10 : 2067.2 keV
+      St43Ca(10,1) = 0
+      Br43Ca(10,1) = 1.0
+      St43Ca(10,2) = 1
+      Br43Ca(10,2) = 0.28
+
+C--   level 11 : 2093.8 keV
+      St43Ca(11,1) = 0
+      Br43Ca(11,1) = 1.0
+
+C--   level 12 : 2102.7 keV
+      St43Ca(12,1) = 1          ! → 372.8
+      Br43Ca(12,1) = 1.0
+      St43Ca(12,2) = 2          ! → 593
+      Br43Ca(12,2) = 0.50
+      St43Ca(12,3) = 0          ! → g.s.
+      Br43Ca(12,3) = 0.50
+
+C--   level 13 : 2223.9 keV
+      St43Ca(13,1) = 2          ! → 593
+      Br43Ca(13,1) = 1.0
+      St43Ca(13,2) = 1          ! → 372.8
+      Br43Ca(13,2) = 0.745
+
+C--   level 14 : 2248.0 keV
+C     (no adopted gammas → remains padded)
+      St43Ca(14,1) = 0
+      Br43Ca(14,1) = 1.0
+
+C--   level 15 : 2249.0 keV
+      St43Ca(15,1) = 0
+      Br43Ca(15,1) = 1.0
+      St43Ca(15,2) = 1
+      Br43Ca(15,2) = 0.126
+      St43Ca(15,3) = 5          ! → 1677
+      Br43Ca(15,3) = 0.023
+
+C--   level 16 : 2272.8 keV
+      St43Ca(16,1) = 3          ! → 990
+      Br43Ca(16,1) = 1.0
+      St43Ca(16,2) = 4          ! → 1394
+      Br43Ca(16,2) = 0.19
+
+C--   level 17 : 2409.7 keV
+      St43Ca(17,1) = 6    ! → 1901.99 keV
+      Br43Ca(17,1) = 0.24
+      St43Ca(17,2) = 5    ! → 1677.84 keV
+      Br43Ca(17,2) = 0.15
+      St43Ca(17,3) = 4    ! → 1394.47 keV
+      Br43Ca(17,3) = 0.98
+      St43Ca(17,4) = 0    ! → g.s.
+      Br43Ca(17,4) = 1.0
+
+C--   level 18 : 2523.0 keV
+C     (no adopted gammas → remains padded)
+
+C     Convert to branching fractions in per-cent
+C     (sum to 100%)
+      DO LL = 0, NLEV-1
+         brsum = 0.
+         DO JJ = 1, MAXBR
+            brsum = brsum + Br43Ca(LL,JJ)
+         ENDDO
+         DO JJ = 1, MAXBR
+            IF(St43Ca(LL,JJ).NE.-1)THEN
+               Br43Ca(LL,JJ) = 100. * Br43Ca(LL,JJ)/brsum
+            ENDIF
+         ENDDO
+      ENDDO
+
+      print*, "***43CA STATES & BRANCHES***"
+      DO LL = 0, NLEV-1
+         Print*, "State --",LL,Ex43Ca(LL)," MeV"
+         DO JJ = 1, MAXBR
+            IF(St43Ca(LL,JJ).NE.-1)THEN
+               PRINT*,"---->",St43Ca(LL,JJ),",",
+     +              Ex43Ca(JJ)," MeV:",Br43Ca(LL,JJ)
+            ENDIF
+         ENDDO
+      ENDDO
+
+
+c$$$
+c$$$      
+c$$$      REAL Ex43Ca(20)
+c$$$      DATA Ex43Ca / 
+c$$$     &     0.000000, 0.372762, 0.593394, 0.990257, 1.394473,
+c$$$     &     1.677840, 1.901990, 1.931530, 1.957400, 2.046210,
+c$$$     &     2.067210, 2.093810, 2.102700, 2.223900, 2.248000,
+c$$$     &     2.249010, 2.272800, 2.409680, 2.523000, -1.00000
+c$$$     &     /
+c$$$
+c$$$      REAL Br43Ca(20,5)
+c$$$      DATA Br43Ca /
+c$$$     &     0.0, 0.0, 0.0, 0.0, 0.0, ! g.s.
+c$$$     &     1.0, 0.0, 0.0, 0.0, 0.0, ! e.x. 1
+c$$$     &     0.423, 1.0, 0.0, 0.0, 5.0  ! e.x. 2
+c$$$     &     1.0, 1.0, 0.1493, 0.0, 0.0, ! e.x. 3
+c$$$     &     0.09, 1.0, 0.075, 0.187, 0.0, ! e.x. 4
+c$$$     &     0.0, 0.0, 0.0, 0.0, 0.0, ! e.x. 5
+c$$$     &     0.0, 0.0, 0.0, 0.0, 0.0, ! e.x. 6
+c$$$     &     0.0, 0.0, 0.0, 0.0, 0.0, ! e.x. 7
+c$$$     &     0.0, 0.0, 0.0, 0.0, 0.0, ! e.x. 8
+c$$$     &     0.0, 0.0, 0.0, 0.0, 0.0, ! e.x. 9
+c$$$     &     0.0, 0.0, 0.0, 0.0, 0.0, ! e.x. 10
+c$$$     &     0.0, 0.0, 0.0, 0.0, 0.0, ! e.x. 11
+c$$$     &     0.0, 0.0, 0.0, 0.0, 0.0, ! e.x. 12
+c$$$     &     0.0, 0.0, 0.0, 0.0, 0.0, ! e.x. 13
+c$$$     &     0.0, 0.0, 0.0, 0.0, 0.0, ! e.x. 14
+c$$$     &     0.0, 0.0, 0.0, 0.0, 0.0, ! e.x. 15
+c$$$     &     0.0, 0.0, 0.0, 0.0, 0.0, ! e.x. 16
+c$$$     &     0.0, 0.0, 0.0, 0.0, 0.0, ! e.x. 17
+c$$$     &     0.0, 0.0, 0.0, 0.0, 0.0, ! e.x. 18
+c$$$     &     0.0, 0.0, 0.0, 0.0, 0.0, ! e.x. 19 (empty)
+c$$$     &     /
+c$$$      REAL St43Ca(20,5)         ! state to decay to
+c$$$      DATA St43Ca /
+c$$$     &     -1, -1, -1, -1, -1, ! g.s.
+c$$$     &     0, -1, -1, -1, -1, ! e.x. 1
+c$$$     &     1, 0, -1, -1, -1  ! e.x. 2
+c$$$     &     0, 1, 2, -1, -1, ! e.x. 3
+c$$$     &     0, 1, 2,  3, -1, ! e.x. 4
+c$$$     &     -1, -1, -1, -1, -1, ! e.x. 5
+c$$$     &     -1, -1, -1, -1, -1, ! e.x. 6
+c$$$     &     -1, -1, -1, -1, -1, ! e.x. 7
+c$$$     &     -1, -1, -1, -1, -1, ! e.x. 8
+c$$$     &     -1, -1, -1, -1, -1, ! e.x. 9
+c$$$     &     -1, -1, -1, -1, -1, ! e.x. 10
+c$$$     &     -1, -1, -1, -1, -1, ! e.x. 11
+c$$$     &     -1, -1, -1, -1, -1, ! e.x. 12
+c$$$     &     -1, -1, -1, -1, -1, ! e.x. 13
+c$$$     &     -1, -1, -1, -1, -1, ! e.x. 14
+c$$$     &     -1, -1, -1, -1, -1, ! e.x. 15
+c$$$     &     -1, -1, -1, -1, -1, ! e.x. 16
+c$$$     &     -1, -1, -1, -1, -1, ! e.x. 17
+c$$$     &     -1, -1, -1, -1, -1, ! e.x. 18
+c$$$     &     -1, -1, -1, -1, -1, ! e.x. 19 (empty)
+c$$$     &     /
+      
 C
 C======================================================================C
 C                                                                      C
@@ -1379,8 +1626,7 @@ C     43K(p,n)43Ca
          ilight = 13            !neutron emission
 C     
 C--   create beam particle --> idpart = 80
-C
-         elevel  = 0. !fkine(3) ! TODO Set state number??
+C      
          devmass = -3.65753926E-02 ! 43K
          aamass  = abeam*amugev + devmass
          tlif    = 1000.
@@ -1411,76 +1657,66 @@ C
 C     neutron decay to state in 43Ca
 C     particle 13 is the neutron
 C     Decide what to do next based on elevel, set from fkine(3)
-         if(abs(elevel).le.1E-6) then ! GS
-            irecoil=82
-            tlif   = 1000.
-            CALL gspart(82,'43Ca_gs',8,prodm+elevel/1E3,
+C         
+C     First create particles for the g.s. and first 18 excited
+C     states (max # that are accessible @1.5 MeV/u). The g.s.
+C     is always the final state, so set that to irecoil
+C
+C     Ground state (irecoil)
+         irecoil = 82
+         elevel = 0
+         tlif = 1000.
+         CALL gspart(irecoil,'43Ca_gs',8,prodm+elevel/1E3,
+     &        zprod,tlif,ubuf,nubuf)
+C
+C     Excited states
+         tlif = 1.E-15
+         DO i=1, NLEV-1
+            elevel = Ex43Ca(i)
+            CALL gspart(irecoil+i,'43Ca_ex'//num(i),8,prodm+elevel/1E3,
      &           zprod,tlif,ubuf,nubuf)
-            brat(1)= 100.
-            mode(1)= 13+100*82
-            CALL uzero(brat,2,6)
-            CALL uzero(mode,2,6)
-            CALL gsdk(81,brat,mode)
-            write(6,*)'|**** 43K(p,n)43Ca reaction ****|'
-            write(6,*)' 100% to gs'
-c$$$
-c$$$  Else if(abs(elevel - 6.13).le.0.001)then !6.13 MeV 2nd excited state
-c$$$  C     First neutron decay to 6.13 MeV state
-c$$$  tlif   = 18.4E-12
-c$$$  CALL gspart(82,'16O_i',8,prodm+elevel/1E3,
-c$$$  &          zprod,tlif,ubuf,nubuf)
-c$$$  brat(1)= 100.
-c$$$  mode(1)= 13+100*82
-c$$$  CALL uzero(brat,2,6)
-c$$$  CALL uzero(mode,2,6)
-c$$$  CALL gsdk(81,brat,mode)
-c$$$  
-c$$$  C     Then gamma decay to 16O(gs)
-c$$$  irecoil = 83
-c$$$  tlif = 1000.
-c$$$  CALL gspart(83,'16O_f',8,prodm,
-c$$$  &          zprod,tlif,ubuf,nubuf) !16O(gs)
-c$$$  brat(1) = 100.
-c$$$  mode(1) = 1+100*83
-c$$$  CALL uzero(brat,2,6)
-c$$$  CALL uzero(mode,2,6)
-c$$$  CALL gsdk(82,brat,mode)
-c$$$  write(6,*)'|**** 13C(a,n)16O reaction ****|'
-c$$$  write(6,*)' 100% to 6.13 MeV -->(gamma)--> gs'
-c$$$  
-c$$$  Else if(abs(elevel - 6.049).le.0.001)then !6.049 MeV 1st excited state
-c$$$  C     First neutron decay to 6.049 MeV state
-c$$$  tlif   = 67E-12
-c$$$  CALL gspart(82,'16O_i',8,prodm+elevel/1E3,
-c$$$  &          zprod,tlif,ubuf,nubuf)
-c$$$  brat(1)= 100.
-c$$$  mode(1)= 13+100*82
-c$$$  CALL uzero(brat,2,6)
-c$$$  CALL uzero(mode,2,6)
-c$$$  CALL gsdk(81,brat,mode)
-c$$$  
-c$$$  C     Then e+ - e- decay to 16O(gs)
-c$$$  C     positrion is 2, electron is 3
-c$$$  irecoil = 83
-c$$$  tlif = 1000.
-c$$$  CALL gspart(83,'16O_f',8,prodm,
-c$$$  &          zprod,tlif,ubuf,nubuf) !16O(gs)
-c$$$  brat(1) = 100.
-c$$$  mode(1) = 2 + 100*3 + 10000*83
-c$$$  CALL uzero(brat,2,6)
-c$$$  CALL uzero(mode,2,6)
-c$$$  CALL gsdk(82,brat,mode)
-c$$$  write(6,*)'|**** 13C(a,n)16O reaction ****|'
-c$$$  write(6,*)' 100% to 6.049 MeV -->(e+- e-)--> gs'
-         Else
-            write(6,*) 'ERROR: case (22) 43K(p,n):',
-     &           'bad fkine(3) [elevel]',elevel,
-     &           'Valid are: 0.0, 6.049, 6.130'
+            print*, 'EX::',i,elevel,irecoil+i
+         ENDDO
+         elevel = 0.
+         ilevel = NINT(fkine(3))
+C     Check bounds: valid entries are 0–18 inclusive
+         IF (ilevel .GE. 0 .AND. ilevel .LE. 18) THEN
+            elevel = Ex43Ca(ilevel)
+            PRINT *, 'Read ELEVEL: ', elevel
+        ELSE
+            PRINT *, 'Error: fkine(3) =', fkine(3),
+     &           ' out of valid range (0–18)'
             STOP
-         Endif
+         ENDIF
 
+C
+C     First Decay 44Ca --> Chosen Excited State in 43Ca
+C
+         CALL uzero(brat,1,10)
+         CALL uzero(mode,1,10)         
 
-         End select
+         brat(1)= 100.
+         mode(1)= 13 + 100*(irecoil+ilevel)
+         CALL gsdk(81,brat,mode)
+         write(6,*)'|**** 43K(p,n)43Ca reaction ****|'
+         write(6,*)' n decay to level',ilevel,
+     +        ' particle:',irecoil+ilevel,' ex:',Ex43Ca(ilevel)
+        
+         
+C     
+C     Now set up gamma decays
+C     
+         DO i = 1, ilevel
+            CALL uzero(brat,1,10)
+            CALL uzero(mode,1,10)
+            DO j = 1, MAXBR
+               brat(j) = Br43Ca(i,j)
+               mode(j) = 1 + 100*(irecoil+St43Ca(i,j))
+            ENDDO
+            CALL gsdk(irecoil+i,brat,mode)
+         ENDDO
+
+      End select
 C
       RETURN
       END
