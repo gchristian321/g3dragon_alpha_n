@@ -270,7 +270,7 @@ C     .double pcm = sqrt((pow(S - M3*M3 - M4*M4, 2) - 4*M3*M3*M4*M4) / (4*S));
 
         eint = totmass - beammass - targmass
 C       different excit for (a,n)
-        If(lkine.eq.13) then
+        If(lkine.eq.13.or.lkine.eq.22) then
            neutmass = 0.9395654
            excit = (beammass+targmass-prodm-neutmass) + eint
         Else
