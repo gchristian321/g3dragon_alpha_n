@@ -15,4 +15,7 @@ C
 
       REAL dedx_scl_b, dedx_scl_r
       COMMON /DEDXSCL/ dedx_scl_b, dedx_scl_r
+
+      REAL dedx_b,dedx_r
+      COMMON /DEDXBR/ dedx_b, dedx_r
       

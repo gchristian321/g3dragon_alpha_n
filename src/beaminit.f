@@ -233,6 +233,7 @@ c$$$     &        ' eVcm^2/1E15'
          write(6,*) 'Beam energy at target exit ',beamo,' MeV'
          write(6,*) 'Beam energy at target centre ',beamm,' MeV'
          write(6,*) '+++++++++++++++++++++++++++++++++++++++++++++++'
+         dedx_b = dedx*dedx_scl_b
 C.
 C.       Initial beam distribution parameters
 C.       
@@ -321,6 +322,8 @@ c$$$     &       ' eVcm^2/1E15'
         recoilenerg = treco*1000.
 		write(6,*) 'Energy mistune (%) ', energscale*100
         write(6,*) 'Recoil energy tuned to ', recoilenerg,' MeV'
+        dedx_r = dedx*dedx_scl_r
+
 
 !
 !  Determine scaling parameters for this reaction c/w the reference tune

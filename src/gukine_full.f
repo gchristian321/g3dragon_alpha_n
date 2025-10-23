@@ -65,7 +65,7 @@ C      REAL betagamma0 / 0.01851 /
 C      REAL delx/ 0. /, dely/ 0. /
 C
       INTEGER imate, partid, ixst
-       REAL  dedx, pcut(5), hrndm1, newm, xx, yy
+      REAL  dedx, pcut(5), hrndm1, newm, xx, yy
 C.
 C.    Initialize all ntuple variables
        print*, 'gukine_full.f'
@@ -194,12 +194,13 @@ C     TODO Modify here --> need nonres flag (GAC) c.f. 13C(a,n) file
       ENDIF
       IF (LKINE.EQ.22) THEN
 C     Make reaction happen at random point in target (non-resonant)
-C     TODO has hard coded stopping power
+C     Note -> beamenergy is nominal beam energy, beame is actual
          call grndm(rndm,2)
-C         eres = beame - rndm(1)*(0.0617587753*2*6.14136028)
-         eres = beamenerg- rndm(1)*(beamenerg-beamo)
+         eres = beame - rndm(1)*(dedx_b*2*6.14136028)
+C         eres = beamenerg- rndm(1)*(beamenerg-beamo)
          eres = 0.001*eres
-C         print*,'beamenerg,beamo,eres',beamenerg,beamo,eres
+C         print*,'beamenerg,beame,beamo,eres',beamenerg,beame,beamo,eres
+C         print*,rndm(1)*(dedx_b*2*6.14136028),rndm(1),dedx_b
       ENDIF
 c$$$      IF (NONRES) THEN
 c$$$C     Make reaction happen at random point in target (non-resonant)
