@@ -192,15 +192,25 @@ C     TODO Modify here --> need nonres flag (GAC) c.f. 13C(a,n) file
       IF (LKINE.NE.19) THEN
       eres = eres0*(resenerg + rndm(1)*reswidth)
       ENDIF
-      IF (NONRES) THEN
+      IF (LKINE.EQ.22) THEN
 C     Make reaction happen at random point in target (non-resonant)
 C     TODO has hard coded stopping power
          call grndm(rndm,2)
-         eres = beame - rndm(1)*(0.00620168169*2*6.14136028)
+C         eres = beame - rndm(1)*(0.0617587753*2*6.14136028)
          eres = beamenerg- rndm(1)*(beamenerg-beamo)
          eres = 0.001*eres
 C         print*,'beamenerg,beamo,eres',beamenerg,beamo,eres
       ENDIF
+c$$$      IF (NONRES) THEN
+c$$$C     Make reaction happen at random point in target (non-resonant)
+c$$$C     TODO has hard coded stopping power
+c$$$         call grndm(rndm,2)
+c$$$         eres = beame - rndm(1)*(0.0617587753*2*6.14136028)
+c$$$         eres = beamenerg- rndm(1)*(beamenerg-beamo)
+c$$$         eres = 0.001*eres
+c$$$         print*,'NONRES!!'
+c$$$C         print*,'beamenerg,beamo,eres',beamenerg,beamo,eres
+c$$$      ENDIF
       IF(LKINE.GE.19.AND.LKINE.LT.22) THEN
 C      IF(LKINE.GE.19) THEN
  888     xx = hrndm1(501)
