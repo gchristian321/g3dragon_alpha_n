@@ -251,7 +251,7 @@ C     FKINE (2) = effective charge of reaction PRODUCT in vacuum       C
 C                                                                      C
 C++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++C
 C
-FKIN 22 7.0 10.0 0.
+FKIN 22 7.0 16.0 0.
 C
 C SET Angular distribution options
 C --> option, min[cos(th_CM)], max[cos(th_CM)]
