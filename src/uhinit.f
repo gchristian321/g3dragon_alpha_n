@@ -402,12 +402,13 @@ C  'History' ntuple
       CALL HBNAME(1000,'HISTORY',E_int,'E_int:R,E_rec:R,E_g(15):R,' //
      +                   'E_gp(15):R,cost_g(15):R,phi_g(15):R,' //
      +                   'cost_gp(15):R,cost_r:R,cosp_r:R,' //
-     +                   'Nodec:I,' //
+     +                   'sinp_r:R,Nodec:I,' //
      +                   'react:I,recdet:I,x_r:R,y_r:R,'//
      +                   'z_r:R,thet_r:R,xstop:R,ystop:R,zstop:R,'//
      +                   'xint:R,yint:R,zint:R,'//
      +    'x:R,y:R,xp:R,yp:R,xtest(10):R,ytest(10):R,etest(10):R,'//
-     +     'dsssdpos:I,beamtof:R,E_n:R,cost_n:R,cosp_n:R' )
+     +     'dsssdpos:I,beamtof:R,cost_n:R,cosp_n:R,sinp_n:R,E_n:R' )
+      CALL HPRNT(1000);
 C.
 C.--> New nutple 20040407
 C.
