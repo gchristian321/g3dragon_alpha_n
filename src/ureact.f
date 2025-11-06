@@ -729,8 +729,19 @@ C
 C
 C--     resonant level populated --> idpart = 81
 C
-        tlif     = hbar/0.931e-3 ! Jaeger 1.1keV lab->0.931 CM
-        resenerg = 1.213
+C     print*,'fkine(4)',fkine(4)
+        IF(INT(fkine(4)).EQ.0) THEN
+           tlif     = hbar/0.931e-3 ! Jaeger 1.1keV lab->0.931 CM
+           resenerg = 1.213
+        ELSEIF(INT(fkine(4)).EQ.1) THEN
+           tlif     = hbar/0.211e-3 ! Jaeger 0.250 keV lab->0.211 keV CM
+           resenerg = 0.704
+        ELSE
+           PRINT *, 'ERROR: bad fkine(4) for case(13):',fkine(4),
+     $          'Valid are 0[11.83 state], 1[11.32 state]'
+           
+           STOP
+        ENDIF
         reswidth = hbar/tlif
         aamass   = aamass + resenerg/1000. + hemass
 C        aamass = sqrt((aamass+targmass)**2 + 2.*targmass*beamenerg*.001)
