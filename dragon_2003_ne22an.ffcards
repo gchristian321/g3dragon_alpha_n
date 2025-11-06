@@ -251,6 +251,7 @@ C     FKINE (2) = effective charge of reaction PRODUCT in vacuum       C
 C                                                                      C
 C++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++C
 C
+C Set to FKIN 13 4.0 4.0 0.0 1.0 for Ne22(a,n) --> 11.32 MeV state
 FKIN 13 4.0 4.0 0.0
 C
 C SET Angular distribution options
