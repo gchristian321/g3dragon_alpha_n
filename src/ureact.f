@@ -764,14 +764,41 @@ C
 C--     branch info -- resonance decays
 C
 C     particle 13 is the neutron
+      IF (ABS(fkine(3)-0.).LT.1.E-3) THEN
+C -------- (a,n0): neutron -> 25Mg(gs)
         brat(1)= 100.
         mode(1)= 13+100*82
         CALL uzero(brat,2,6)
         CALL uzero(mode,2,6)
         CALL gsdk(81,brat,mode)
 C
+        write(6,*)'|**** 22Ne(a,n)25Mg reaction ****|'
+        write(6,*)' 100% to gs'
 C
-
+      ELSE IF (ABS(fkine(3)-1.).LT.1.E-3) THEN
+C -------- (a,n1): neutron -> 25Mg(exc), then gamma -> 25Mg(gs)
+	CALL gspart(83,'Mg25_exc',8,prodm+0.585042E-3,zprod,3.38E-9,ubuf,nubuf)
+C
+C neutron decay from 26Mg* (ID=81) to excited 25Mg (ID=83)
+	brat(1)=100.
+        mode(1)=13+100*83
+        CALL uzero(brat,2,6)
+        CALL uzero(mode,2,6)
+        CALL gsdk(81,brat,mode)
+C
+C gamma decay: 25Mg_exc (83) -> gamma(1) + 25Mg_gs (82)
+        brat(1)=100.
+        mode(1)=1+100*82
+        CALL uzero(brat,2,6)
+        CALL uzero(mode,2,6)
+        CALL gsdk(83,brat,mode)
+C
+	write(6,*)'|**** 22Ne(a,n1)25Mg(0.585)->gs ****|'
+C
+      ELSE
+	PRINT *,'Invalid fkine(3)=',fkine(3),' (use 0. or 1.)'
+      ENDIF
+C
 c$$$
 
 C        brat(1) = 100.
@@ -784,8 +811,6 @@ c$$$C
 c$$$        CALL gsdk(82,brat,mode)
 C
 C
-        write(6,*)'|**** 22Ne(a,n)25Mg reaction ****|'
-        write(6,*)' 100% to gs'
 C
       case(14)
 C

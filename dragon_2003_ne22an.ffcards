@@ -251,7 +251,7 @@ C     FKINE (2) = effective charge of reaction PRODUCT in vacuum       C
 C                                                                      C
 C++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++C
 C
-FKIN 13 4.0 4.0
+FKIN 13 4.0 4.0 0.0
 C
 C SET Angular distribution options
 C --> option, min[cos(th_CM)], max[cos(th_CM)]
@@ -272,7 +272,7 @@ C MTUN -0.0 -0.0 -0.000 -0.000 0.02
 C    BEAM incoming beam energy (MeV=MeV/u*BeamMass)
 BEAM 7.979
 
-C SCAL  1.75898  2.30782 
+C SCAL  1.75898  2.30782
 C
 C++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++C
 C                                                                      C
