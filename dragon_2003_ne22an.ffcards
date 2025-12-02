@@ -271,7 +271,7 @@ TUNE 1.8885 19. 4.
 C    MTUN x(cm) y(cm) dx(rad) dy(rad) separator tune(%/100)
 C MTUN -0.0 -0.0 -0.000 -0.000 0.02
 C    BEAM incoming beam energy (MeV=MeV/u*BeamMass)
-BEAM 7.979
+BEAM 10.
 
 C SCAL  1.75898  2.30782
 C
