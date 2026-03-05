@@ -175,7 +175,7 @@ C
        xstop = vect(1)
        ystop = vect(2)
        zstop = vect(3)
-C       print*, 'recoil disappeared!', vect(1), vect(2), vect(3)
+C       print*, 'RSTP ', chname_nlevel, vect(1), vect(2), vect(3)
         write(4,*) vect(1), vect(2), vect(3), tlast 
 C       write(4,*) "recoil stopped mit",vect(1),vect(2),vect(3),tlast
 C       write(4,*) sleng, "  volume  ", chname_nlevel
@@ -229,6 +229,24 @@ C     alpha acceptance tests - plot x-y coords at Q1 fringe field start
          write(24,*) (vect(1)+1024.617632), " ", vect(2), " ", trec
 
       endif
+
+c$$$C     Print position at mass slits
+c$$$      If(ipart.eq.irecoil.and.chname_nlevel.eq.'TST2'.and.
+c$$$     &     in_new_vol.eq.1)then
+c$$$c$$$         write(6,*),"MSLT", (vect(1)-(-509.712341+8.1*cos(20*3.1415926/ 
+c$$$c$$$     +   180.)))*cos(70.*3.1415926/180.) + (vect(3)-(661.428772-8.1* 
+c$$$c$$$     +   sin(20.*3.145926/180.)))*sin(70.*3.1415926/180.), " ", vect(2)
+c$$$c$$$     +    " ", trec
+c$$$         print*,"MSLT_R(x,y,z):",vect(1),vect(2),vect(3)
+c$$$      endif
+c$$$      If(ipart.eq.80.and.chname_nlevel.eq.'TST2'.and.
+c$$$     &     in_new_vol.eq.1)then
+c$$$c$$$         write(6,*),"MSLT", (vect(1)-(-509.712341+8.1*cos(20*3.1415926/ 
+c$$$c$$$     +   180.)))*cos(70.*3.1415926/180.) + (vect(3)-(661.428772-8.1* 
+c$$$c$$$     +   sin(20.*3.145926/180.)))*sin(70.*3.1415926/180.), " ", vect(2)
+c$$$c$$$     +    " ", trec
+c$$$         print*,"MSLT_B(x,y,z):",vect(1),vect(2),vect(3)
+c$$$      endif
 C.
 C *** If particle is in ENDV volume
 C.
