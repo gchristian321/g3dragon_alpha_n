@@ -75,6 +75,7 @@ C.    Initialize all ntuple variables
       cosp_n = 99.
       sinp_n = 99.
       E_rec = 0.
+      thcm = 99.
       cost_r = 99.
       cosp_r = 99.
       sinp_r = 99.
@@ -156,7 +157,8 @@ c         print*, beammom, alpha, beame, beammass
          CALL NRAN(rndm,2)
          phi = 2*3.141592654*rndm(1)
          thet = acos(1.0-rndm(2)*0.0003125) ! between 0 and 25 mrad
-c         thet = 0.
+c     thet = 0.
+         thcm = 99.
          cost_r = cos(thet)
          cosp_r = cos(phi)
          ! print*, phi, thet
