@@ -46,8 +46,7 @@ C
       
       
       REAL rndm(2)
-      INTEGER ilevel
-
+      INTEGER ilevel      
 
       INTEGER MAXBR, NLEV
       PARAMETER (MAXBR=6, NLEV=18)
@@ -1669,6 +1668,7 @@ C
          ubuf(1) = fkine(1)
 C     
          CALL gspart(80,'K43',8,aamass,zbeam,tlif,ubuf,nubuf)
+         
 C     
 C--   NON resonant level populated --> idpart = 81
          tlif     = hbar/10.e-3 ! 10 keV width (non-resonant)
@@ -1683,6 +1683,32 @@ C--   NON resonant level populated --> idpart = 81
          
 C     
          CALL gspart(81,'nonres_44Ca',8,aamass,zprod,tlif,ubuf,nubuf)
+
+C--   If fkine(4) == 1, simulate elastic channel
+         if(NINT(fkine(4)).eq.1)then
+            print*,'SIMULATE K43 + p elastic'
+            ilight = 14         ! proton
+            prodm = aamass
+            zprod = zbeam
+            aprod = abeam
+            irecoil = 82
+            elevel = 0
+            tlif = 1000.
+            CALL gspart(irecoil,'43K_elastic',8,prodm+elevel/1E3,
+     &           zprod,tlif,ubuf,nubuf)
+C--   Decay 44Ca --> 43K + p
+            CALL uzero(brat,1,10)
+            CALL uzero(mode,1,10)         
+            brat(1)= 100.
+            mode(1)= ilight + 100*irecoil
+            CALL gsdk(81,brat,mode)
+            write(6,*)'|**** 43K(p,p)43K reaction ****|'
+            
+            goto 123            ! SKIPS (a,n) code
+         endif
+
+C--   Otherwise, simulate K43(p,n) as normal
+         print*,'SIMULATE K43(pn,)'         
 C     
 C--   Define states in 43Ca from neutron decays
 C     
@@ -1751,7 +1777,9 @@ C
             ENDDO
             CALL gsdk(irecoil+i,brat,mode)
          ENDDO
-
+         
+ 123     continue
+         
       End select
 C
       RETURN
