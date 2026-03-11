@@ -194,8 +194,6 @@ C
           z_r = GKIN(3,K)
           thet_r = ACOS(GKIN(3,K)/PTOT)
           thcm = atan2(sqrt(PCM(1,K)**2 + PCM(2,K)**2), PCM(3,K))
-c$$$C     Write CM angle to fort.7
-c$$$          write(7,*) atan2(sqrt(PCM(1,K)**2 + PCM(2,K)**2), PCM(3,K))
        Endif
 C     GKIN(1,K),GKIN(2,K( and GKIN(3,K) are the lab momentum vector
 C     x,y and z components of the recoil when NTYPE(K)=IRECOIL.
