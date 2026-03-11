@@ -407,7 +407,8 @@ C  'History' ntuple
      +                   'z_r:R,thet_r:R,xstop:R,ystop:R,zstop:R,'//
      +                   'xint:R,yint:R,zint:R,'//
      +    'x:R,y:R,xp:R,yp:R,xtest(10):R,ytest(10):R,etest(10):R,'//
-     +     'dsssdpos:I,beamtof:R,cost_n:R,cosp_n:R,sinp_n:R,E_n:R' )
+     +     'dsssdpos:I,beamtof:R,cost_n:R,cosp_n:R,sinp_n:R,E_n:R,'//
+     +     'thcm:R')
       CALL HPRNT(1000);
 C.
 C.--> New nutple 20040407
