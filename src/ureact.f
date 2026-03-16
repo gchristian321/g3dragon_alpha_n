@@ -29,6 +29,7 @@ C
       PARAMETER ( c12mass = 12.0 * amugev )
 C
       REAL devmass,aamass,aamass1,zbeam, elevel, aprod,  tlif
+      REAL Mbeam
 C
       INTEGER mode(10)
       REAL    brat(10)
@@ -1664,6 +1665,7 @@ C--   create beam particle --> idpart = 80
 C      
          devmass = -3.65753926E-02 ! 43K
          aamass  = abeam*amugev + devmass
+         Mbeam = aamass
          tlif    = 1000.
          ubuf(1) = fkine(1)
 C     
@@ -1687,14 +1689,19 @@ C
 C--   If fkine(4) == 1, simulate elastic channel
          if(NINT(fkine(4)).eq.1)then
             print*,'SIMULATE K43 + p elastic'
-            ilight = 14         ! proton
-            prodm = aamass
+            irecoil = 82
+C--   Create "proton" with hmass (atomic H)
+            ubuf(1) = 1.
+            CALL gspart(irecoil+1,'1H',8,hmass,
+     &           ztarg,tlif,ubuf,nubuf)
+            ilight = irecoil+1
+C--   Create "new" 43K w/ same mass as beam
+            ubuf(1) = fkine(2)
+            prodm = Mbeam
             zprod = zbeam
             aprod = abeam
-            irecoil = 82
-            elevel = 0
             tlif = 1000.
-            CALL gspart(irecoil,'43K_elastic',8,prodm+elevel/1E3,
+            CALL gspart(irecoil,'43K_elastic',8,prodm,
      &           zprod,tlif,ubuf,nubuf)
 C--   Decay 44Ca --> 43K + p
             CALL uzero(brat,1,10)
